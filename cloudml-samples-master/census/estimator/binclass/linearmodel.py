@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import os
 from six.moves.urllib.request import urlopen
-import json
+import json, random
 import numpy as np
 import tensorflow as tf
 
@@ -16,6 +16,7 @@ IRIS_TEST = "iris_test.csv"
 IRIS_TEST_URL = "http://download.tensorflow.org/data/iris_test.csv"
 
 keys=["latitude","longitude"]
+heading=[0,(len(keys)-1)]+keys
 
 def main():
   # If the training and test sets aren't stored locally, download them.
@@ -23,17 +24,25 @@ def main():
     raw = urlopen(IRIS_TRAINING_URL).read()
     raw = json.loads(raw.decode('utf-8'))['response']['docs']
     raw = [{ key : i[key] for key in keys } for i in raw]
+    heading[0]=len(raw)+1
+    print(heading)
     with open(IRIS_TRAINING, "wb") as f:
+      for h in heading:
+        f.write(str(h)+',')
+      f.write('\n')
       for i in raw:
-        f.write(str(i['latitude']**2)+','+str(i['longitude']**2)+'\n')
+        f.write(str(i['latitude']**2)+','+str(i['longitude']**2)+','+str(random.randint(0,2))+'\n')
 
   if not os.path.exists(IRIS_TEST):
     raw = urlopen(IRIS_TRAINING_URL).read()
     raw = json.loads(raw.decode('utf-8'))['response']['docs']
     raw = [{ key : i[key] for key in keys } for i in raw]
+    heading[0]=len(raw)+1
     with open(IRIS_TEST, "wb") as f:
+      for h in heading:
+        f.write(str(h)+',')
       for i in raw:
-        f.write(str(i['latitude']**2)+','+str(i['longitude']**2)+'\n')
+        f.write(str(i['latitude']**2)+','+str(i['longitude']**2)+str(random.randint(0,2))+'\n')
         #raw = urlopen(IRIS_TEST_URL).read()
         #with open(IRIS_TEST, "wb") as f:
         #f.write(raw)
@@ -43,14 +52,14 @@ def main():
       filename=IRIS_TRAINING,
       target_dtype=np.int,
       features_dtype=np.float32)
-  #print (training_set)
+  print (training_set)
   test_set = tf.contrib.learn.datasets.base.load_csv_with_header(
       filename=IRIS_TEST,
       target_dtype=np.int,
       features_dtype=np.float32)
 
   # Specify that all features have real-value data
-  feature_columns = [tf.feature_column.numeric_column("x", shape=[4])]
+  feature_columns = [tf.feature_column.numeric_column("x", shape=[2])]
 
   # Build 3 layer DNN with 10, 20, 10 units respectively.
   classifier = tf.estimator.DNNClassifier(feature_columns=feature_columns,
