@@ -49,7 +49,7 @@ def main():
                         f.write(b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b",")
                     else:
                         f.write(b"" + str(d[key]) + b",")
-            f.write(b"," + str(random.randint(0,3)) + b'\n');
+            f.write(b"," + str(random.randint(0,3)) + b'\n')
 
     if not os.path.exists(PARTICIPANT_TEST):
         raw = urlopen(PARTICIPANT_TRAINING_URL).read()
