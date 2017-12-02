@@ -9,6 +9,8 @@ import random
 import numpy as np
 import tensorflow as tf
 
+TRAINING_SIZE=100
+
 # Data sets
 PARTICIPANT_TRAINING = "PARTICIPANT_TRAINING.csv"
 PARTICIPANT_TRAINING_URL = "https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json" + \
@@ -29,6 +31,18 @@ plan_to_nums_dict = {"BRONZE": 0,
                      "SILVER": 1,
                      "GOLD": 2,
                      "PLATINUM": 3 }
+
+group_data=[]
+
+def collapse():
+    group_participants = urlopen("https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=*:*&rows=100&fl=*").read()
+    group_data = json.loads(group_participants)['response']['docs']
+    for participant in group_data:
+        details=urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=id="+participant[id]+"*:*&rows=100&fl=*")
+        quotes=urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=id="+participant[id]+"*:*&rows=100&fl=*")
+        plans=urlopen("https://v3v10.vitechinc.com/solr/v_plan_detail/select?indent=on&wt=json&q=id="+participant[id]+"*:*&rows=100&fl=*")
+
+    print(group_data)
 
 def main():
     # If the training and test sets aren't stored locally, download them.
@@ -128,4 +142,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    #main()
+    collapse()
