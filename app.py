@@ -37,4 +37,3 @@ if __name__ == "__main__":
     app.secret_key = "appapp"
     app.run(host='0.0.0.0',port=8000)
     setup(group_data, -1, -1, -1)
-    
