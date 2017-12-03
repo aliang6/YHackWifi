@@ -305,15 +305,15 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
 def grabPrediction(data):
     plan = ""
     for key in data:
+        new_sample = []
         if key == "DOB":
-            d[key]=d[key][:4]
+            data[key]=data[key][:4]
         if key in str_to_nums_dict:
             if key == "PURCHASED":
                 plan = str_to_nums_dict[key]
-            new_sample.append(str_to_nums_dict[key][d[key]])
+            new_sample.append(str_to_nums_dict[key][data[key]])
         else:
             new_sample.append(data[key])
-        new_sample.append(plan_to_nums_dict_normal_case[data["PURCHASED"]])
         
     new_sample = np.array(new_sample, dtype=np.float32)
     
@@ -350,17 +350,20 @@ def grabUserData(data):
     # global passed_data
     plan_prices = {}
 
+    plan = grabPrediction(data)
+    data["PURCHASED"] = nums_to_plan[plan]
+
     for which_plan in range(4):
 
         new_sample = []
 
         for key in data:
             if key == "DOB":
-                d[key]=d[key][:4]
+                data[key]=data[key][:4]
             if key in str_to_nums_dict:
                 if key == "PURCHASED":
                     plan = str_to_nums_dict[key]
-                new_sample.append(str_to_nums_dict[key][d[key]])
+                new_sample.append(str_to_nums_dict[key][data[key]])
             else:
                 new_sample.append(data[key])
         if nums_to_plan[which_plan] == "Bronze":

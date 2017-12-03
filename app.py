@@ -25,16 +25,18 @@ def input():
     if request.method == 'GET':
         return render_template("input.html")
     else:
-        input=dict(request.form)
+        input = dict(request.form)
         for i in input:
-            input[i]=input[i][0]
+            input[i] = input[i][0]
         userPrediction = grabPrediction(input)
-        return render_template("par_coor.html", plan=userPrediction)
+        plan_prices = grabUserData(input)
+        return render_template("par_coor.html", plan=userPrediction, userPrices=plan_prices)
 
 
 if __name__ == "__main__":
     app.debug = True
     app.secret_key = "appapp"
     app.run(host='0.0.0.0',port=8000)
-    setup(group_data, -1, -1, -1)
+    data = []
+    setup(data, -1, -1, -1)
     
