@@ -1,15 +1,56 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Vitech: Get a Quote</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../main.js"></script>
+    <link rel="stylesheet" href="../static/css/main.css">
+  </head>
 
-<html>
-
-    <head>
-        <title>Vitech: Get a Quote</title>
-        <link rel="stylesheet" type="text/css" href="/static/css/style.css">
-        <meta charset="utf-8">
-
-    </head>
-
-    <body>
-    </body>
-
+  <body>
+      <div class = "container-fluid">
+        <div class="row">
+          <div class="col-md-3">
+              <a href="main.html"><img id="logo" src="../static/VitechLogo.png" style="width:75%"/></a>
+          </div>
+          </br>
+          <hr id="hr1"/>
+          <hr id="hr2"/>
+          <hr id="hr3"/>
+        </div> 
+      </div>
+      <div id="fade">
+        <div class="row" id ="welcome">
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-5">
+            <h3 id="welcome_text">Welcome</h3>
+          </div>
+          <div class="col-md-2">
+            <h3 id="to_text">to</h3> 
+          </div>
+          <div class="col-md-4">
+            <img id="v3" src="../static/v3.png" style="width:65%">
+          </div>
+        </div>
+        <div class="row" id="cust_name">
+          <div class="col-md-12">
+            <h2 id="prompt">Please enter your name:</h2>
+          </div>
+        </div>
+        <div class="row" id="enter_name">
+          <div class="col-md-3"></div>
+          <div class="col-md-6" align="center">
+            <input type="text" id="name_box">
+          </div>
+        </div>
+        <div class="row" id="button_row">
+          <div class="col-md-5"></div>
+          <div class="col-md-2" align="center">
+            <button type="button" class="btn btn-success btn-lg">Proceed</button>
+          </div>
+        </div>
+      </div>
+  </body>
 </html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Input</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../input.js"></script>
+    <link rel="stylesheet" href="../static/css/input.css">
+  </head>
+
+  <body>
+      <div class = "container-fluid">
+        <div class="row">
+          <div class="col-sm-3">
+              <a href="main.html"><img id="logo" src="../static/VitechLogo.png" style="width:75%"/></a>
+          </div>
+          </br>
+          <hr class="hr1"/>
+          <hr id="hr2"/>
+          <hr id="hr3"/>
+        </div> 
+      </div>
+
+      <form method="post">
+        <div id="fade">
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-3" class="prompt">Sex: </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">Male</div>
+            <div class="col-md-1"><input type="radio" name="sex" id="sex1" class="sex" value="M" checked></div>
+            <div class="col-md-2" align="center">Female</div>
+            <div class=:"col-md-1"><input type="radio" name="sex" id="sex2" class="sex" value="F"></div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">DOB (yyyymmdd): </div>
+            <div class="col-md-3">
+              <input type="text" id="dob">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">State: </div>
+            <div class="col-md-3">
+              <input type="text" id="state">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">City: </div>
+            <div class="col-md-3">
+              <input type="text" id="city">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">Employment Status (E or U): </div>
+            <div class="col-md-3">
+              <input type="text" id="emp_status">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">Annual Income: </div>
+            <div class="col-md-3">
+              <input type="text" id="ann_inc">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">Marital Status (S or M): </div>
+            <div class="col-md-3">
+              <input type="text" id="mar_stat">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">Height (inches): </div>
+            <div class="col-md-3">
+              <input type="text" id="height">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">Weight (pounds): </div>
+            <div class="col-md-3">
+              <input type="text" id="weight">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">Do you smoke? (Yes or No): </div>
+            <div class="col-md-3">
+              <input type="text" id="tobacco">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h3>Do you have: </h3>
+            </div>
+            <div class="col-md-1">
+              <h3>Yes</h3>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <h3>No</h3>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h4>Chronic Viral Hepatitis B without Delta-Agent<h4>
+            </div>
+            <div class="col-md-1">
+              <input type="radio" name="hepB" id="hepBy" class="yesno" value="Yes">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <input type="radio" name="hepB" id="hepBn" class="yesno" value="No" checked>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h4>Ataxic cerebral palsy<h4>
+            </div>
+            <div class="col-md-1">
+              <input type="radio" name="acpy" id="acpy" class="yesno" value="Yes">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <input type="radio" name="acpy" id="acpn" class="yesno" value="No" checked>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h4>Diarrhea<h4>
+            </div>
+            <div class="col-md-1">
+              <input type="radio" name="diar" id="diary" class="yesno" value="Yes">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <input type="radio" name="diar" id="diarn" class="yesno" value="No" checked>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h4>Tachycardia<h4>
+            </div>
+            <div class="col-md-1">
+              <input type="radio" name="tach" id="tachy" class="yesno" value="Yes">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <input type="radio" name="tach" id="tachn" class="yesno" value="No" checked>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h4>Obstructive Sleep Apnea<h4>
+            </div>
+            <div class="col-md-1">
+              <input type="radio" name="osa" id="osay" class="yesno" value="Yes">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <input type="radio" name="osa" id="osan" class="yesno" value="No" checked>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h4>Fracture of Metacarpal Bone with Laterality<h4>
+            </div>
+            <div class="col-md-1">
+              <input type="radio" name="fmbl" id="fmbly" class="yesno" value="Yes">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <input type="radio" name="fmbl" id="fmbln" class="yesno" value="No" checked>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h4>Abnormal Heart Beat<h4>
+            </div>
+            <div class="col-md-1">
+              <input type="radio" name="ahb" id="ahb" class="ahby" value="Yes">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <input type="radio" name="ahb" id="ahb" class="ahbn" value="No" checked>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h4>Type 2 Diabetes Mellitus with Hyperglycemia<h4>
+            </div>
+            <div class="col-md-1">
+              <input type="radio" name="t2d" id="t2dy" class="yesno" value="Yes">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <input type="radio" name="t2d" id="t2dn" class="yesno" value="No" checked>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h4>HIV Disease Resulting in Bacterial Infection<h4>
+            </div>
+            <div class="col-md-1">
+              <input type="radio" name="hiv" id="hivy" class="yesno" value="Yes">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <input type="radio" name="hiv" id="hivn" class="yesno" value="No" checked>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">
+              <h4>Cough with Hemorrhage<h4>
+            </div>
+            <div class="col-md-1">
+              <input type="radio" name="cwh" id="cwhy" class="yesno" value="Yes">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <input type="radio" name="cwh" id="cwhn" class="yesno" value="No" checked>
+            </div>
+          </div>
+
+          <hr id="bottom_line"/>
+
+          <div class="row" id="button_row">
+            <div class="col-md-5"></div>
+            <div class="col-md-2" align="center">
+              <button type="button" id="submit" class="btn btn-success btn-lg">Get My Quote</button>
+            </div>
+          </div>
+        </div>
+      </form>
+  </body>
+</html>
