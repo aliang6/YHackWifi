@@ -12,7 +12,7 @@ import tensorflow as tf
 import collections
 from pandas.io.json import json_normalize
 
-TRAINING_SIZE=1000
+TRAINING_SIZE=10
 actual_size=1000
 
 # Data sets
@@ -23,14 +23,10 @@ PARTICIPANT_TRAINING_URL = "https://v3v10.vitechinc.com/solr/v_participant/selec
 PARTICIPANT_TEST = "PARTICIPANT_TEST.csv"
 PARTICIPANT_TEST_URL = PARTICIPANT_TRAINING_URL
 
-keys=["latitude","longitude","PURCHASED","EMPLOYMENT_STATUS"]
+keys=["latitude","longitude","PURCHASED","EMPLOYMENT_STATUS", "ANNUAL_INCOME","HEIGHT","WEIGHT", "PEOPLE_COVERED", "OPTIONAL_INSURED", "BRONZE", "SILVER", "GOLD", "PLATINUM"]
 #keys = ["sex", "EMPLOYMENT_STATUS", "TOBACCO", "MARITAL_STATUS", "latitude", "longitude"]
 plan_ranks = ["BRONZE", "SILVER", "GOLD", "PLATINUM"]
 heading = [0, (len(keys))] + plan_ranks
-plan_to_nums_dict = {"BRONZE": 0,
-                     "SILVER": 1,
-                     "GOLD": 2,
-                     "PLATINUM": 3 }
 plan_to_nums_dict_normal_case = {"Bronze": 0,
                                  "Silver": 1,
                                  "Gold": 2,
@@ -135,8 +131,8 @@ def main():
                             if key == "PURCHASED":
                                 plan = str_to_nums_dict[key]
                             f.write(b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b",")
-                        elif key in plan_ranks:
-                            f.write(b"" + str( plan_to_nums_dict[key] ) + b",")
+                        #elif key in plan_ranks:
+                            #f.write(b"" + str( plan_to_nums_dict[key] ) + b",")
                         else:
                             f.write(b"" + str(d[key]).encode() + b",")
                 f.write(str(plan[d[key]]).encode() + b'\n')
@@ -158,8 +154,8 @@ def main():
                             if key == "PURCHASED":
                                 plan = str_to_nums_dict[key]
                             f.write(b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b",")
-                        elif key in plan_ranks:
-                            f.write(b"" + str( plan_to_nums_dict[key] ) + b",")
+                        #elif key in plan_ranks:
+                            #f.write(b"" + str( plan_to_nums_dict[key] ) + b",")
                         else:
                             f.write(b"" + str(d[key]).encode() + b",")
                 f.write(str(plan[d[key]]).encode() + b'\n')
