@@ -158,7 +158,6 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
 
     if which_plan == -1 or which_plan == -2:
         heading[0] = len(data)
-        datfile=open(fileName.csv,"a")
         with open(fileName, "wb") as f:
             if which_plan == -1:
                 for h in heading:
@@ -176,11 +175,9 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
                                     plan = str_to_nums_dict[key]
                                 out=b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b","
                                 f.write(out)
-                                datfile.write(out)
                             else:
                                 out=b"" + str(d[key]).encode() + b","
                                 f.write(out)
-                                datfile.write(out)
                         if which_plan == -2 and key in plan_ranks:
                             f.write(b"" + str( d[key] ).encode + b",")
                 if which_plan == -1:
@@ -224,11 +221,9 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
                                     plan = str_to_nums_dict[key]
                                 out=b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b","
                                 f.write(out)
-                                datfile.write(out)
                             else:
                                 out=b"" + str(d[key]).encode() + b","
                                 f.write(out)
-                                datfile.write(out)
                         if which_plan == -2 and key in plan_ranks:
                             f.write(b"" + str( d[key] ).encode + b",")
                 if which_plan == -1:
@@ -365,9 +360,10 @@ def grabPrediction(data):
         num_epochs=1,
         shuffle=False)
 
-    prediction = classifier.predict(input_fn=predict_input_fn)
-    plan = prediction;
-    return plan
+    predictions = list(classifier.predict(input_fn=predict_input_fn))
+    predicted_classes = [p["classes"] for p in predictions]
+
+    return predicted_classes[0]
 
 def writeAllData():
     return group_data
@@ -377,6 +373,7 @@ def grabUserData(data):
     plan_prices = {}
 
     plan = grabPrediction(data)
+    print(plan)
     data["PURCHASED"] = nums_to_plan[plan]
 
     for which_plan in range(4):
