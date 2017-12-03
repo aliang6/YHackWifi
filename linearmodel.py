@@ -280,7 +280,7 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
     # Evaluate accuracy.
     accuracy_score = classifier.evaluate(input_fn=test_input_fn)["accuracy"]
 
-    print("\nTest Accuracy: {0:f}\n".format(accuracy_score))
+    #print("\nTest Accuracy: {0:f}\n".format(accuracy_score))
     
     return accuracy_score
 
@@ -302,8 +302,46 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
 
     # print()
 
-def grabPrediction():
-    prediction = ""
+def grabPrediction(data):
+    plan = ""
+    for key in data:
+        if key == "DOB":
+            d[key]=d[key][:4]
+        if key in str_to_nums_dict:
+            if key == "PURCHASED":
+                plan = str_to_nums_dict[key]
+            new_sample.append(str_to_nums_dict[key][d[key]])
+        else:
+            new_sample.append(data[key])
+        new_sample.append(plan_to_nums_dict_normal_case[data["PURCHASED"]])
+        
+    new_sample = np.array(new_sample, dtype=np.float32)
+    
+    fileName = "static/PARTICIPANT_TRAINING.csv"
+    training_set = tf.contrib.learn.datasets.base.load_csv_with_header(
+        filename=fileName,
+        target_dtype=np.int,
+        features_dtype=np.float32)
+    fileName = "static/PARTICIPANT_TEST.csv"
+    test_set = tf.contrib.learn.datasets.base.load_csv_with_header(
+        filename=fileName,
+        target_dtype=np.int,
+        features_dtype=np.float32)
+    
+    feature_columns = [tf.feature_column.numeric_column("x", shape=[len(keys)])]
+
+    classifier = tf.estimator.DNNClassifier(feature_columns=feature_columns,
+                                            hidden_units=[10, 20, 10],
+                                            n_classes=len(keys),
+                                            model_dir="/tmp/insurance_plan_model/")
+    predict_input_fn = tf.estimator.inputs.numpy_input_fn(
+        x={"x": new_sample},
+        num_epochs=1,
+        shuffle=False)
+
+    prediction = classifier.predict(input_fn=predict_input_fn)
+    plan = prediction;
+    return plan
 
 def writeAllData():
     return group_data
@@ -312,18 +350,9 @@ def grabUserData(data):
     # global passed_data
     plan_prices = {}
 
-    # loop over bronzies
-    # lastPrediction = 0
-    # for i in range(3):
-    #     print("i = " + str(i))
-    #     print(lastPrediction)
-    #     lastPrediction = int(setup(bronzies, 0, i, lastPrediction))
-    #     passed_data = []
-    # plan_prices["BRONZE"] = lastPrediction
-
-    new_sample = []
-
     for which_plan in range(4):
+
+        new_sample = []
 
         for key in data:
             if key == "DOB":
@@ -334,15 +363,14 @@ def grabUserData(data):
                 new_sample.append(str_to_nums_dict[key][d[key]])
             else:
                 new_sample.append(data[key])
+        if nums_to_plan[which_plan] == "Bronze":
+            new_sample.append(data["BRONZE"])
+        elif nums_to_plan[which_plan] == "Silver":
+            new_sample.append(data["SILVER"])
+        elif nums_to_plan[which_plan] == "Gold":
+            new_sample.append(data["GOLD"])
         else:
-            if nums_to_plan[which_plan] == "Bronze":
-                new_sample.append(data["BRONZE"])
-            elif nums_to_plan[which_plan] == "Silver":
-                new_sample.append(data["SILVER"])
-            elif nums_to_plan[which_plan] == "Gold":
-                new_sample.append(data["GOLD"])
-            else:
-                new_sample.append(data["PLATINUM"])
+            new_sample.append(data["PLATINUM"])
         
         new_sample = np.array(new_sample, dtype=np.float32)
         

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, session, request, url_for, redirect, Markup
-from linearmodel import grabUserData, writeAllData
+from linearmodel import grabUserData, writeAllData, grabPrediction, setup
 
 app = Flask(__name__)
 
@@ -21,7 +21,6 @@ def index():
             return render_template("index.html", writeAllData = True)
 
 @app.route("/input",methods=['GET','POST'])
-@app.route("/input",methods=['GET','POST'])
 def input():
     if request.method == 'GET':
         return render_template("input.html")
@@ -29,10 +28,13 @@ def input():
         input=dict(request.form)
         for i in input:
             input[i]=input[i][0]
-        #input
+        userPrediction = grabPrediction(input)
+        return render_template("par_coor.html", plan=userPrediction)
 
 
 if __name__ == "__main__":
     app.debug = True
     app.secret_key = "appapp"
     app.run(host='0.0.0.0',port=8000)
+    setup(group_data, -1, -1, -1)
+    
