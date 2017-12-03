@@ -315,6 +315,9 @@ def grabPrediction(data):
         if key in str_to_nums_dict:
             if key == "PURCHASED":
                 plan = str_to_nums_dict[key]
+            print(key)
+            print(str_to_nums_dict[key])
+            print(data[key])
             new_sample.append(str_to_nums_dict[key][data[key]])
         else:
             new_sample.append(data[key])
