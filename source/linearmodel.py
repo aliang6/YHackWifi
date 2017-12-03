@@ -12,7 +12,7 @@ import tensorflow as tf
 import collections
 from pandas.io.json import json_normalize
 
-TRAINING_SIZE=1
+TRAINING_SIZE=1482000
 
 # Data sets
 PARTICIPANT_TRAINING = "PARTICIPANT_TRAINING.csv"
@@ -56,19 +56,23 @@ def flatten_json(y):
 
 def collapse():
     group_participants = urlopen("https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
-    #details_participants = urlopen()
-    group_data = json.loads(group_participants)['response']['docs']
-    for participant in group_data:
-        detail = urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=100&fl=*").read()
-        detail = flatten_json(json.loads(detail)['response']['docs'][0])
-        for key in detail:
-            if key in keys:
-                participant[key]=detail[key]
-        quote = urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=100&fl=*").read()
-        quote = flatten_json(json.loads(quote)['response']['docs'][0])
-        for key in quote:
-            if key in keys:
-                participant[key]=quote[key]
+    group_participants = json.loads(group_participants)['response']['docs']
+    details = urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
+    details = json.loads(details)['response']['docs']
+    quotes = urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
+    quotes = json.loads(quotes)['response']['docs']
+    for participant in group_participants:
+        for detail in details:
+            if detail['id']==participant['id']:
+                print("fpound")
+                for key in detail:
+                    participant[key]=detail[key]
+        for quote in quotes:
+            if quote['id']==participant['id']:
+                for key in quote:
+                    participant[key]=quote[key]
+    print (group_participants[0])
+
 
 def main():
     # If the training and test sets aren't stored locally, download them.
