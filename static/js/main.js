@@ -12,15 +12,13 @@ var BASE_PRICE, AD_D, DEDUCTIBLE, PLAN_NAME, COVERAGE_AMOUNT;
 //JSON
 var json;
 
-console.log("AS");
-
 $(function(){
 	$("#fade").css("display", "none");
 	$("#fade").fadeIn(1000);
 	$("#submit").click(function(){
 		cust_name = $("#name_box").val();
 		$("#fade:visible").fadeOut(1000, function(){
-			window.location = "input";
+			window.location = "/input";
 		});
 	});
 });
