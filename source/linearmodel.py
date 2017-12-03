@@ -72,7 +72,7 @@ def collapse():
                 for key in quote:
                     participant[key]=quote[key]
     print (group_participants[0])
-
+    group_data=group_participants
 
 def main():
     # If the training and test sets aren't stored locally, download them.
