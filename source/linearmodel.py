@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
+import copy
 import os
 from six.moves.urllib.request import urlopen
 import json
@@ -12,7 +12,7 @@ import tensorflow as tf
 import collections
 from pandas.io.json import json_normalize
 
-TRAINING_SIZE=1000
+TRAINING_SIZE=10
 
 # Data sets
 PARTICIPANT_TRAINING = "PARTICIPANT_TRAINING.csv"
@@ -31,12 +31,23 @@ plan_to_nums_dict_normal_case = {"Bronze": 0,
                                  "Silver": 1,
                                  "Gold": 2,
                                  "Platinum": 3}
+nums_to_plan = {0: "Bronze",
+                1: "Silver",
+                2: "Gold",
+                3: "Platinum"}
 str_to_nums_dict = {"sex": {"M": 0, "F": 1},
                     "EMPLOYMENT_STATUS": {"Unemployed": 0, "Employed": 1},
                     "TOBACCO": {"NO": 0, "YES": 1},
                     "MARITAL_STATUS": {"S": 0, "M": 1},
                     "PURCHASED" : plan_to_nums_dict_normal_case,
                     "Risk_factor" : {"Low": 1, "Medium": 2, "High": 3}}
+
+platinums = []
+golds = []
+silvers = []
+bronzies = []
+passed_data = []
+
 group_participants = []
 group_data = []
 
@@ -60,6 +71,10 @@ def flatten_json(y):
 def collapse():
     global group_participants
     global group_data
+    global platinums
+    global golds
+    global silvers
+    global bronzies
     group_participants = urlopen("https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)).read()
     group_data = json.loads(group_participants)['response']['docs']
     for participant in group_data:
@@ -79,60 +94,74 @@ def collapse():
         quote = urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=1").read()
         quote = flatten_json(json.loads(quote)['response']['docs'][0])
         for key in quote:
+            if key == "PURCHASED":
+                if key == "Platinum":
+                    platinums.append(participant)
+                elif key == "Gold":
+                    golds.append(participant)
+                elif key == "Silver":
+                    silvers.append(participant)
+                else:
+                    bronzies.append(participant)
             if key in keys:
                 participant[key]=quote[key]
-        #print (participant)
-# def collapse():
-#     group_participants = urlopen("https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
-#     print("hello")
-#     group_participants = json.loads(group_participants)['response']['docs']
-#     print("hello")
-#     details = urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
-#     details = json.loads(details)['response']['docs']
-#     print("hello")
-#     quotes = urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
-#     quotes = json.loads(quotes)['response']['docs']
-#     print("hello")
-#     num_participants = 0
-#     for participant in group_participants:
-#         if num_participants >= actual_size:
-#             break
-#         found_details = []
-#         found_quote = []
-#         for detail in details:
-#             if detail['id']==participant['id']:
-#                 print("fpound")
-#                 for key in detail:
-#                     participant[key]=detail[key]
-#                 found_details = True
-#                 break
-#         for quote in quotes:
-#             if quote['id']==participant['id']:
-#                 for key in quote:
-#                     participant[key]=quote[key]
-#                 found_quote = True
-#                 break
-#         if found_details and found_quote:
-#             num_participants += 1
-#         #print(num_participants)
-#     print(num_participants)
-#     print (group_participants)
-#     group_data=group_participants
 
-def main():
-    collapse()
-    # If the training and test sets aren't stored locally, download them.
-    if not os.path.exists(PARTICIPANT_TRAINING):
-        #raw = urlopen(PARTICIPANT_TRAINING_URL).read()
-        #raw = json.loads(raw.decode('utf-8'))['response']['docs']
-        raw = group_data
-        #raw = [{key: i[key] for key in keys} for i in raw]
-        heading[0] = len(raw)
-        with open(PARTICIPANT_TRAINING, "wb") as f:
+def makeHeader(loopNum, lastLoopPrediction):
+    num_vals = 4
+    if loopNum > 0:
+        num_vals = 10
+    header = [len(passed_data)] + [len(keys)]
+    if loopNum <= 2:
+        for index in range(num_vals):
+            header+= [index+lastLoopPrediction + (10 ** loopNum)]
+    return header
+
+def makeBuckets(data, which_plan, loopNum, lastLoopPrediction):
+    global passed_data
+    division = 10 ** (2 - loopNum)
+    for participant in data:
+        participant_copy = copy.deepcopy(participant)
+        if nums_to_plan[which_plan] == "Bronze":
+            participant_copy["BRONZE"] = int(participant_copy["BRONZE"]/division)
+        elif nums_to_plan[which_plan] == "Silver":
+            participant_copy["SILVER"] = int(participant_copy["SILVER"]/division)
+        elif nums_to_plan[which_plan] == "Gold":
+            participant_copy["GOLD"] = int(participant_copy["GOLD"]/division)
+        elif nums_to_plan[which_plan] == "Platinum":
+            participant_copy["PLATINUM"] = int(participant_copy["PLATINUM"]/division)
+        passed_data.append(participant_copy)
+    return passed_data
+
+def setup(data, which_plan, loopNum, lastLoopPrediction):
+
+    global heading
+
+    fileName = PARTICIPANT_TRAINING
+
+    if which_plan == -1:
+        collapse()
+        data = group_data
+    else:
+        if nums_to_plan[which_plan] == "Bronze":
+            fileName = "BRONZIES_" + PARTICIPANT_TRAINING
+        elif nums_to_plan[which_plan] == "Silver":
+            fileName = "SILVERS_" + PARTICIPANT_TRAINING
+        elif nums_to_plan[which_plan] == "Platinum":
+            fileName = "GOLDS_" + PARTICIPANT_TRAINING
+        else:
+            fileName = "PLATINUMS_" + PARTICIPANT_TRAINING
+        makeBuckets(data, which_plan, loopNum, lastLoopPrediction)
+        heading = makeHeader(loopNum, lastLoopPrediction)
+        print(heading)
+        data = passed_data
+
+    if which_plan == -1 or not os.path.exists(fileName):
+        heading[0] = len(data)
+        with open(fileName, "wb") as f:
             for h in heading:
                 f.write(b"" + str(h).encode() + b",")
             f.write(b'\n')
-            for d in raw:
+            for d in data:
                 plan = ""
                 for key in d:
                     if key in keys:
@@ -142,22 +171,37 @@ def main():
                             if key == "PURCHASED":
                                 plan = str_to_nums_dict[key]
                             f.write(b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b",")
-                        #elif key in plan_ranks:
-                            #f.write(b"" + str( plan_to_nums_dict[key] ) + b",")
                         else:
                             f.write(b"" + str(d[key]).encode() + b",")
-                f.write(b"" + str(plan[d["PURCHASED"]]).encode() + b"\n")
-    if not os.path.exists(PARTICIPANT_TEST):
-        #raw = urlopen(PARTICIPANT_TRAINING_URL).read()
-        #raw = json.loads(raw.decode('utf-8'))['response']['docs']
-        raw = group_data
-        #raw = [{key: i[key] for key in keys} for i in raw]
-        heading[0] = len(raw)
+                if which_plan == -1:
+                    f.write(b"" + str(plan[d["PURCHASED"]]).encode() + b"\n")
+                else:
+                    if nums_to_plan[which_plan] == "Bronze":
+                        f.write(b"" + str(d["BRONZE"]).encode() + b"\n")
+                    elif nums_to_plan[which_plan] == "Silver":
+                        f.write(b"" + str(d["SILVER"]).encode() + b"\n")
+                    elif nums_to_plan[which_plan] == "Gold":
+                        f.write(b"" + str(d["GOLD"]).encode() + b"\n")
+                    else:
+                        f.write(b"" + str(d["PLATINUM"]).encode() + b"\n")
+
+    fileName = PARTICIPANT_TEST
+    if which_plan != -1:
+        if nums_to_plan[which_plan] == "Bronze":
+            fileName = "BRONZIES_" + PARTICIPANT_TRAINING
+        elif nums_to_plan[which_plan] == "Silver":
+            fileName = "SILVERS_" + PARTICIPANT_TRAINING
+        elif nums_to_plan[which_plan] == "Platinum":
+            fileName = "GOLDS_" + PARTICIPANT_TRAINING
+        else:
+            fileName = "PLATINUMS_" + PARTICIPANT_TRAINING
+
+    if which_plan == -1 or not os.path.exists(fileName):
         with open(PARTICIPANT_TEST, "wb") as f:
             for h in heading:
                 f.write(b"" + str(h).encode() + b",")
             f.write(b'\n')
-            for d in raw:
+            for d in data:
                 plan = ""
                 for key in d:
                     if key in keys:
@@ -167,31 +211,55 @@ def main():
                             if key == "PURCHASED":
                                 plan = str_to_nums_dict[key]
                             f.write(b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b",")
-                        #elif key in plan_ranks:
-                            #f.write(b"" + str( plan_to_nums_dict[key] ) + b",")
                         else:
                             f.write(b"" + str(d[key]).encode() + b",")
-                f.write(str(plan[d["PURCHASED"]]).encode() + b"\n")
+                if which_plan == -1:
+                    f.write(b"" + str(plan[d["PURCHASED"]]).encode() + b"\n")
+                else:
+                    if nums_to_plan[which_plan] == "Bronze":
+                        f.write(b"" + str(d["BRONZE"]).encode() + b"\n")
+                    elif nums_to_plan[which_plan] == "Silver":
+                        f.write(b"" + str(d["SILVER"]).encode() + b"\n")
+                    elif nums_to_plan[which_plan] == "Gold":
+                        f.write(b"" + str(d["GOLD"]).encode() + b"\n")
+                    else:
+                        f.write(b"" + str(d["PLATINUM"]).encode() + b"\n")
 
     # Load datasets.
     training_set = tf.contrib.learn.datasets.base.load_csv_with_header(
-        filename=PARTICIPANT_TRAINING,
+        filename=fileName,
         target_dtype=np.int,
         features_dtype=np.float32)
 
     test_set = tf.contrib.learn.datasets.base.load_csv_with_header(
-        filename=PARTICIPANT_TEST,
+        filename=fileName,
         target_dtype=np.int,
         features_dtype=np.float32)
 
     # Specify that all features have real-value data
     feature_columns = [tf.feature_column.numeric_column("x", shape=[len(keys)])]
 
+    num_classes = len(plan_ranks)
+    model_dir_path = "/tmp/insurance_plan_model"
+    if which_plan != -1:
+        if nums_to_plan[which_plan] == "Bronze":
+            model_dir_path = "/tmp/insurance_plan_model/" + str(loopNum) + "/bronzies"
+        elif nums_to_plan[which_plan] == "Silver":
+            model_dir_path = "/tmp/insurance_plan_model/" + str(loopNum) + "/silvers"
+        elif nums_to_plan[which_plan] == "Gold":
+            model_dir_path = "/tmp/insurance_plan_model/" + str(loopNum) + "/golds"
+        else:
+            model_dir = "/tmp/insurance_plan_model/" + str(loopNum) + "/platinums"
+        if loopNum == 0:
+            num_classes = 4
+        else:
+            num_classes = 10
+
     # Build 3 layer DNN with 10, 20, 10 units respectively.
     classifier = tf.estimator.DNNClassifier(feature_columns=feature_columns,
                                             hidden_units=[10, 20, 10],
-                                            n_classes=len(plan_ranks),
-                                            model_dir="/tmp/insurance_plan_model")
+                                            n_classes=num_classes,
+                                            model_dir=model_dir_path)
     # Define the training inputs
     train_input_fn = tf.estimator.inputs.numpy_input_fn(
         x={"x": np.array(training_set.data)},
@@ -213,6 +281,8 @@ def main():
     accuracy_score = classifier.evaluate(input_fn=test_input_fn)["accuracy"]
 
     print("\nTest Accuracy: {0:f}\n".format(accuracy_score))
+    
+    return accuracy_score
 
     # Classify two new flower samples.
     # new_samples = np.array(
@@ -232,7 +302,61 @@ def main():
 
     # print()
 
+def grabPrediction():
+    prediction = ""
+
+def writeAllData():
+    return group_data
+
+def grabUserData():
+    global passed_data
+    plan_prices = {}
+
+    # loop over bronzies
+    lastPrediction = 0
+    for i in range(3):
+        print("i = " + str(i))
+        print(lastPrediction)
+        lastPrediction = int(setup(bronzies, 0, i, lastPrediction))
+        passed_data = []
+    plan_prices["BRONZE"] = lastPrediction
+
+    print(plan_prices["BRONZE"])
+
+    # loop over silvers
+    lastPrediction = 0
+    for i in range(3):
+        lastPrediction = int(setup(silvers, 1, i, lastPrediction))
+        passed_data = []
+    plan_prices["SILVER"] = lastPrediction
+
+    
+    print(plan_prices["SILVER"])
+
+    # loop over golds
+    lastPrediction = 0
+    for i in range(3):
+        lastPrediction = int(setup(golds, 2, i, lastPrediction))
+        passed_data = []
+    plan_prices["GOLD"] = lastPrediction
+
+    
+    print(plan_prices["GOLD"])
+
+    # loop over plats
+    lastPrediction = 0
+    for i in range(3):
+        lastPrediction = int(setup(platinums, 3, i, lastPrediction))
+        passed_data = []
+    plan_prices["PLATINUMS"] = lastPrediction
+
+    
+    print(plan_prices["PLATINUM"])
+
+    return plan_prices
+
 
 if __name__ == "__main__":
     #collapse()
-    main()
+    setup(group_data, -1, -1, -1)
+    grabUserData()
