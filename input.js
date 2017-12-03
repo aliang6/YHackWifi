@@ -14,9 +14,9 @@ var json;
 
 $(function(){
 	$("#fade").css("display", "none");
-	$("#fade").fadeIn(2000);
+	$("#fade").fadeIn(1000);
 	$("#submit").click(function(){
-		$("#fade:visible").fadeOut(2000, function(){
+		$("#fade:visible").fadeOut(1000, function(){
 			/*DOB = $("#dob").val();
 			state = $("#state").val();
 			city = $("#city").val();
@@ -96,7 +96,7 @@ $(function(){
 			else{
 				hemorrhage_cough = 0;
 			}*/
-			window.location = "input.html";
+			window.location = "par_coor.html";
 		});
 	});
 });

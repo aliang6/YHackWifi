@@ -14,10 +14,10 @@ var json;
 
 $(function(){
 	$("#fade").css("display", "none");
-	$("#fade").fadeIn(2000);
+	$("#fade").fadeIn(1000);
 	$("#submit").click(function(){
 		cust_name = $("#name_box").val();
-		$("#fade:visible").fadeOut(2000, function(){
+		$("#fade:visible").fadeOut(1000, function(){
 			window.location = "input.html";
 		});
 	});
