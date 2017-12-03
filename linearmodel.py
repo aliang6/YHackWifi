@@ -10,7 +10,6 @@ import random
 import numpy as np
 import tensorflow as tf
 import collections
-from pandas.io.json import json_normalize
 
 TRAINING_SIZE=10
 
@@ -157,6 +156,7 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
 
     if which_plan == -1:
         heading[0] = len(data)
+        datfile=open("data.csv","a")
         with open(fileName, "wb") as f:
             for h in heading:
                 f.write(b"" + str(h).encode() + b",")
@@ -170,9 +170,13 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
                         if key in str_to_nums_dict:
                             if key == "PURCHASED":
                                 plan = str_to_nums_dict[key]
-                            f.write(b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b",")
+                            out=b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b","
+                            f.write(out)
+                            datfile.write(out)
                         else:
-                            f.write(b"" + str(d[key]).encode() + b",")
+                            out=b"" + str(d[key]).encode() + b","
+                            f.write(out)
+                            datfile.write(out)
                 if which_plan == -1:
                     f.write(b"" + str(plan[d["PURCHASED"]]).encode() + b"\n")
                 else:
@@ -281,7 +285,7 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
     accuracy_score = classifier.evaluate(input_fn=test_input_fn)["accuracy"]
 
     #print("\nTest Accuracy: {0:f}\n".format(accuracy_score))
-    
+
     return accuracy_score
 
     # Classify two new flower samples.
@@ -316,7 +320,7 @@ def grabPrediction(data):
             new_sample.append(data[key])
         
     new_sample = np.array(new_sample, dtype=np.float32)
-    
+
     fileName = "static/PARTICIPANT_TRAINING.csv"
     training_set = tf.contrib.learn.datasets.base.load_csv_with_header(
         filename=fileName,
@@ -327,7 +331,7 @@ def grabPrediction(data):
         filename=fileName,
         target_dtype=np.int,
         features_dtype=np.float32)
-    
+
     feature_columns = [tf.feature_column.numeric_column("x", shape=[len(keys)])]
 
     classifier = tf.estimator.DNNClassifier(feature_columns=feature_columns,
@@ -354,9 +358,7 @@ def grabUserData(data):
     data["PURCHASED"] = nums_to_plan[plan]
 
     for which_plan in range(4):
-
         new_sample = []
-
         for key in data:
             if key == "DOB":
                 data[key]=data[key][:4]
@@ -374,9 +376,9 @@ def grabUserData(data):
             new_sample.append(data["GOLD"])
         else:
             new_sample.append(data["PLATINUM"])
-        
+
         new_sample = np.array(new_sample, dtype=np.float32)
-        
+
         fileName = "static/BRONZIES_PARTICIPANT_TRAINING.csv"
         training_set = tf.contrib.learn.datasets.base.load_csv_with_header(
             filename=fileName,
@@ -387,7 +389,7 @@ def grabUserData(data):
             filename=fileName,
             target_dtype=np.int,
             features_dtype=np.float32)
-        
+
         feature_columns = [tf.feature_column.numeric_column("x", shape=[len(keys)])]
 
         classifier = tf.estimator.DNNClassifier(feature_columns=feature_columns,
