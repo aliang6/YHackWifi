@@ -420,8 +420,9 @@ def grabUserData(data):
             num_epochs=1,
             shuffle=False)
 
-        prediction = classifier.predict(input_fn=predict_input_fn)
-        plan_prices[nums_to_plan[which_plan]] = prediction;
+        predictions = list(classifier.predict(input_fn=predict_input_fn))
+        predicted_classes = [p["classes"] for p in predictions]
+        plan_prices[nums_to_plan[which_plan]] = predicted_classes[0];
     print(plan_prices)
 
     return plan_prices
