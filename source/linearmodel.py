@@ -2,14 +2,17 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+
 import os
 from six.moves.urllib.request import urlopen
 import json
 import random
 import numpy as np
 import tensorflow as tf
+import collections
+from pandas.io.json import json_normalize
 
-TRAINING_SIZE=100
+TRAINING_SIZE=1
 
 # Data sets
 PARTICIPANT_TRAINING = "PARTICIPANT_TRAINING.csv"
@@ -19,11 +22,11 @@ PARTICIPANT_TRAINING_URL = "https://v3v10.vitechinc.com/solr/v_participant/selec
 PARTICIPANT_TEST = "PARTICIPANT_TEST.csv"
 PARTICIPANT_TEST_URL = PARTICIPANT_TRAINING_URL
 
-keys=["latitude","longitude"]
+keys=["latitude","longitude","PURCHASED","EMPLOYMENT_STATUS"]
 #keys = ["sex", "EMPLOYMENT_STATUS", "TOBACCO", "MARITAL_STATUS", "latitude", "longitude"]
 plan_ranks = ["BRONZE", "SILVER", "GOLD", "PLATINUM"]
 heading = [0, (len(keys))] + plan_ranks
-str_to_nums_dict = {"sex": {"male": 0, "female": 1},
+str_to_nums_dict = {"sex": {"M": 0, "F": 1},
                     "EMPLOYMENT_STATUS": {"Unemployed": 0, "Employed": 1},
                     "TOBACCO": {"NO": 0, "YES": 1},
                     "MARITAL_STATUS": {"S": 0, "M": 1} }
@@ -34,15 +37,38 @@ plan_to_nums_dict = {"BRONZE": 0,
 
 group_data=[]
 
+#credit to Amir Ziai
+def flatten_json(y):
+    out = {}
+    def flatten(x, name=''):
+        if type(x) is dict:
+            for a in x:
+                flatten(x[a], name + a + '_')
+        elif type(x) is list:
+            i = 0
+            for a in x:
+                flatten(a, name + str(i) + '_')
+                i += 1
+        else:
+            out[name[:-1]] = x
+    flatten(y)
+    return out
+
 def collapse():
-    group_participants = urlopen("https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=*:*&rows=100&fl=*").read()
+    group_participants = urlopen("https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
+    #details_participants = urlopen()
     group_data = json.loads(group_participants)['response']['docs']
     for participant in group_data:
-        details=urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=id="+participant[id]+"*:*&rows=100&fl=*")
-        quotes=urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=id="+participant[id]+"*:*&rows=100&fl=*")
-        plans=urlopen("https://v3v10.vitechinc.com/solr/v_plan_detail/select?indent=on&wt=json&q=id="+participant[id]+"*:*&rows=100&fl=*")
-
-    print(group_data)
+        detail = urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=100&fl=*").read()
+        detail = flatten_json(json.loads(detail)['response']['docs'][0])
+        for key in detail:
+            if key in keys:
+                participant[key]=detail[key]
+        quote = urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=100&fl=*").read()
+        quote = flatten_json(json.loads(quote)['response']['docs'][0])
+        for key in quote:
+            if key in keys:
+                participant[key]=quote[key]
 
 def main():
     # If the training and test sets aren't stored locally, download them.
@@ -51,7 +77,6 @@ def main():
         raw = json.loads(raw.decode('utf-8'))['response']['docs']
         raw = [{key: i[key] for key in keys} for i in raw]
         heading[0] = len(raw)
-
         with open(PARTICIPANT_TRAINING, "wb") as f:
             for h in heading:
                 f.write(b"" + str(h).encode() + b",")
@@ -81,6 +106,7 @@ def main():
                         else:
                             f.write(b"" + str(d[key]) + b",")
                 f.write(str(random.randint(0,3)) + b'\n')
+
     # Load datasets.
     training_set = tf.contrib.learn.datasets.base.load_csv_with_header(
         filename=PARTICIPANT_TRAINING,
@@ -142,5 +168,5 @@ def main():
 
 
 if __name__ == "__main__":
-    #main()
     collapse()
+    #main()
