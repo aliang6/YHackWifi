@@ -17,7 +17,7 @@ function fadeOut(elements) {
     var timer = setInterval(function () {
         if (elements.style.opacity <= 0.1){
             clearInterval(timer);
-            //elements.style.display = 'none';
+            elements.style.display = 'none';
         }
         elements.style.opacity = alpha;
         alpha -= alpha * 0.1;
