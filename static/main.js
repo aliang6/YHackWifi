@@ -12,8 +12,7 @@ var BASE_PRICE, AD_D, DEDUCTIBLE, PLAN_NAME, COVERAGE_AMOUNT;
 //JSON
 var json;
 
-console.log("AS");
-
+console.log("BS");
 $(function(){
 	$("#fade").css("display", "none");
 	$("#fade").fadeIn(1000);

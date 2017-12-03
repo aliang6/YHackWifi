@@ -11,12 +11,25 @@ def index():
         return render_template("index.html")
     else:
         button = request.form['button']
+        print(request.form)
         if button == "Get My Quote":
             userPredictions = grabUserData()
             return render_template("index.html", participants=userPredictions)
         else:
             writeAllData()
             return render_template("index.html", participants=group_participants)
+
+@app.route("/input",methods=['GET','POST'])
+@app.route("/input",methods=['GET','POST'])
+def input():
+    if request.method == 'GET':
+        return render_template("input.html")
+    else:
+        input=dict(request.form)
+        for i in input:
+            input[i]=input[i][0]
+        #input
+
 
 if __name__ == "__main__":
     app.debug = True
