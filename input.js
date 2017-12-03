@@ -96,7 +96,7 @@ $(function(){
 			else{
 				hemorrhage_cough = 0;
 			}*/
-			window.location = "par_coor.html";
+			window.location = "./par_coor";
 		});
 	});
 });
