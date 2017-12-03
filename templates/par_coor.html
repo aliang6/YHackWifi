@@ -7,7 +7,6 @@
         <script src="../jquery-3.2.1.min.js"></script>
         <link rel="stylesheet" type="text/css" href="../d3.parcoords.css">
         <script src="../d3.parcoords.js"></script>
-        <script type="text/javascript" src="../par_coor.js"></script>
         <link rel="stylesheet" href="../static/css/par_coor.css">
     </head>
 
@@ -21,7 +20,7 @@
                 <hr id="hr1"/>
                 <hr id="hr2"/>
                 <hr id="hr3"/>
-            </div> 
+            </div>
 
             <div id="fade">
 
@@ -52,6 +51,7 @@
             </div>
         </div>
     </body>
+    <script type="text/javascript" src="../par_coor.js"></script>
     <script id="coloring-basic">var colors = d3.scale.category20b();
         // create a chart in every element with class "parcoords-coloring"
         d3.selectAll(".parcoords-coloring")
@@ -106,13 +106,9 @@
             .mode("queue")
             .render()
             .brushMode("1D-axes");  // enable brushing
-
             //parcoords.highlight(); Highlight data
-
             parcoords.svg.selectAll("text")
             .style("font", "10px sans-serif");
         });
     </script>
-
-
 </html>
