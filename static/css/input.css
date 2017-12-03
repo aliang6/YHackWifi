@@ -108,7 +108,7 @@ h4 {
 input[type="text"] {
 	border: none;
 	border-bottom: 1px solid #6495ED;
-    width: 300px;
+    width: 200px;
     transition: width 0.4s ease-in-out;
     text-align: center;
     color: #708090;

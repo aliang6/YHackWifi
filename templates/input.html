@@ -35,17 +35,17 @@
 
           <div class="row">
             <div class="col-md-2"></div>
-            <div class="col-md-4" class="prompt">DOB (yyyymmdd): </div>
+            <div class="col-md-4" class="prompt">DOB (yyyy-mm-dd): </div>
             <div class="col-md-3">
-              <input type="text" id="dob">
+              <input type="text" name="DOB" id="dob">
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-2"></div>
-            <div class="col-md-4" class="prompt">State: </div>
+            <div class="col-md-4" class="prompt">Address: </div>
             <div class="col-md-3">
-              <input type="text" id="state">
+              <input type="text" name="address" id="address">
             </div>
           </div>
 
@@ -53,7 +53,31 @@
             <div class="col-md-2"></div>
             <div class="col-md-4" class="prompt">City: </div>
             <div class="col-md-3">
-              <input type="text" id="city">
+              <input type="text" name="city" id="city">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">State: </div>
+            <div class="col-md-3">
+              <input type="text" name="state" id="state">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">Longitude: </div>
+            <div class="col-md-3">
+              <input type="text" name="longitude" id="longitude">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">Latitude: </div>
+            <div class="col-md-3">
+              <input type="text" name="latitude" id="latitude">
             </div>
           </div>
 
@@ -61,7 +85,23 @@
             <div class="col-md-2"></div>
             <div class="col-md-4" class="prompt">Employment Status (E or U): </div>
             <div class="col-md-3">
-              <input type="text" id="emp_status">
+              <input type="text" name="EMPLOYMENT_STATUS" id="emp_status">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">Number of People Being Covered: </div>
+            <div class="col-md-3">
+              <input type="text" name="PEOPLE_COVERED" id="peo_cov">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" class="prompt">Optional Insured: </div>
+            <div class="col-md-3">
+              <input type="text" name="OPTIONAL_INSURED" id="opt_ins">
             </div>
           </div>
 
@@ -69,7 +109,7 @@
             <div class="col-md-2"></div>
             <div class="col-md-4" class="prompt">Annual Income: </div>
             <div class="col-md-3">
-              <input type="text" id="ann_inc">
+              <input type="text" name="ANNUAL_INCOME" id="ann_inc">
             </div>
           </div>
 
@@ -77,7 +117,7 @@
             <div class="col-md-2"></div>
             <div class="col-md-4" class="prompt">Marital Status (S or M): </div>
             <div class="col-md-3">
-              <input type="text" id="mar_stat">
+              <input type="text" name="MARITAL_STATUS" id="mar_stat">
             </div>
           </div>
 
@@ -85,7 +125,7 @@
             <div class="col-md-2"></div>
             <div class="col-md-4" class="prompt">Height (inches): </div>
             <div class="col-md-3">
-              <input type="text" id="height">
+              <input type="text" name="HEIGHT" id="height">
             </div>
           </div>
 
@@ -93,15 +133,15 @@
             <div class="col-md-2"></div>
             <div class="col-md-4" class="prompt">Weight (pounds): </div>
             <div class="col-md-3">
-              <input type="text" id="weight">
+              <input type="text" name="WEIGHT" id="weight">
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-2"></div>
-            <div class="col-md-4" class="prompt">Do you smoke? (Yes or No): </div>
+            <div class="col-md-4" class="prompt">Do you eat or smoke tobacco? (Yes or No): </div>
             <div class="col-md-3">
-              <input type="text" id="tobacco">
+              <input type="text" name="TOBACCO" id="tobacco">
             </div>
           </div>
 
@@ -125,11 +165,11 @@
               <h4>Chronic Viral Hepatitis B without Delta-Agent<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="hepB" id="hepBy" class="yesno" value="Yes">
+              <input type="radio" name="Chronic viral hepatitis B without delta-agent" id="hepBy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="hepB" id="hepBn" class="yesno" value="No" checked>
+              <input type="radio" name="Chronic viral hepatitis B without delta-agent" id="hepBn" class="yesno" value="No" checked>
             </div>
           </div>
 
@@ -139,11 +179,11 @@
               <h4>Ataxic cerebral palsy<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="acpy" id="acpy" class="yesno" value="Yes">
+              <input type="radio" name="Ataxic cerebral palsy" id="acpy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="acpy" id="acpn" class="yesno" value="No" checked>
+              <input type="radio" name="Ataxic cerebral palsy" id="acpn" class="yesno" value="No" checked>
             </div>
           </div>
 
@@ -153,11 +193,11 @@
               <h4>Diarrhea<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="diar" id="diary" class="yesno" value="Yes">
+              <input type="radio" name="Diarrhea, unspecified" id="diary" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="diar" id="diarn" class="yesno" value="No" checked>
+              <input type="radio" name="Diarrhea, unspecified" id="diarn" class="yesno" value="No" checked>
             </div>
           </div>
 
@@ -167,11 +207,11 @@
               <h4>Tachycardia<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="tach" id="tachy" class="yesno" value="Yes">
+              <input type="radio" name="Tachycardia, unspecified" id="tachy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="tach" id="tachn" class="yesno" value="No" checked>
+              <input type="radio" name="Tachycardia, unspecified" id="tachn" class="yesno" value="No" checked>
             </div>
           </div>
 
@@ -181,11 +221,11 @@
               <h4>Obstructive Sleep Apnea<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="osa" id="osay" class="yesno" value="Yes">
+              <input type="radio" name="Obstructive Sleep Apnea" id="osay" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="osa" id="osan" class="yesno" value="No" checked>
+              <input type="radio" name="Obstructive Sleep Apnea" id="osan" class="yesno" value="No" checked>
             </div>
           </div>
 
@@ -195,11 +235,11 @@
               <h4>Fracture of Metacarpal Bone with Laterality<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="fmbl" id="fmbly" class="yesno" value="Yes">
+              <input type="radio" name="Unspecified fracture of specified metacarpal bone with unspecified laterality" id="fmbly" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="fmbl" id="fmbln" class="yesno" value="No" checked>
+              <input type="radio" name="Unspecified fracture of specified metacarpal bone with unspecified laterality" id="fmbln" class="yesno" value="No" checked>
             </div>
           </div>
 
@@ -209,11 +249,11 @@
               <h4>Abnormal Heart Beat<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="ahb" id="ahb" class="ahby" value="Yes">
+              <input type="radio" name="Other abnormalities of heart beat" id="ahb" class="ahby" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="ahb" id="ahb" class="ahbn" value="No" checked>
+              <input type="radio" name="Other abnormalities of heart beat" id="ahb" class="ahbn" value="No" checked>
             </div>
           </div>
 
@@ -223,11 +263,11 @@
               <h4>Type 2 Diabetes Mellitus with Hyperglycemia<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="t2d" id="t2dy" class="yesno" value="Yes">
+              <input type="radio" name="Type 2 diabetes mellitus with hyperglycemia" id="t2dy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="t2d" id="t2dn" class="yesno" value="No" checked>
+              <input type="radio" name="Type 2 diabetes mellitus with hyperglycemia" id="t2dn" class="yesno" value="No" checked>
             </div>
           </div>
 
@@ -237,11 +277,11 @@
               <h4>HIV Disease Resulting in Bacterial Infection<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="hiv" id="hivy" class="yesno" value="Yes">
+              <input type="radio" name="HIV disease resulting in other bacterial infections" id="hivy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="hiv" id="hivn" class="yesno" value="No" checked>
+              <input type="radio" name="HIV disease resulting in other bacterial infections" id="hivn" class="yesno" value="No" checked>
             </div>
           </div>
 
@@ -251,11 +291,11 @@
               <h4>Cough with Hemorrhage<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="cwh" id="cwhy" class="yesno" value="Yes">
+              <input type="radio" name="cough with hemorrhage" id="cwhy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="cwh" id="cwhn" class="yesno" value="No" checked>
+              <input type="radio" name="cough with hemorrhage" id="cwhn" class="yesno" value="No" checked>
             </div>
           </div>
 

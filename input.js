@@ -1,7 +1,7 @@
 // Participants
 var cust_name, DOB, state, city, sex;
 // Participant Details
-var EMPLOYMENT_STATUS, ANNUAL_INCOME, MARITAL_STATUS, HEIGHT, WEIGHT, TOBACCO;
+var EMPLOYMENT_STATUS, ANNUAL_INCOME, MARITAL_STATUS, HEIGHT, WEIGHT, TOBACCO, PEOPLE_COVERED, OPTIONAL_INSURED;
 // Participant Details Preconditions
 var hepatitis_B, ataxic_cerebral, diarrhea, tachycardia, sleep_apnea, metacarpal_fracture, heart_abnormalities, diabetes, HIV, hemorrhage_cough;
 // Quotes
@@ -17,7 +17,7 @@ $(function(){
 	$("#fade").fadeIn(2000);
 	$("#submit").click(function(){
 		$("#fade:visible").fadeOut(2000, function(){
-			DOB = $("#dob").val();
+			/*DOB = $("#dob").val();
 			state = $("#state").val();
 			city = $("#city").val();
 			EMPLOYMENT_STATUS = $("#emp_status").val();
@@ -95,8 +95,8 @@ $(function(){
 			}
 			else{
 				hemorrhage_cough = 0;
-			}
-			//window.location = "input.html";
+			}*/
+			window.location = "input.html";
 		});
 	});
 });
