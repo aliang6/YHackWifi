@@ -1,65 +1,31 @@
 <html lang = "en">
 	<head>
 		<title>Vitech Life Insurance Quoting</title>
-		<script type="text/javascript" src="search.js">
-			// Participants
-			var cust_name, DOB, state, city, sex;
-			// Participant Details
-			var EMPLOYMENT_STATUS, ANNUAL_INCOME, MARITAL_STATUS, HEIGHT, WEIGHT, TOBACCO;
-			// Participant Details Preconditions
-			var hepatitis_B, ataxic_cerebral, diarrhea, tachycardia, sleep_apnea, metacarpal_fracture, heart_abnormalities, diabetes, HIV, hemorrhage_cough;
-			// Quotes
-			var PLATINUM, GOLD, SILVER, BRONZE, PURCHASED;
-			// Plan Details
-			var BASE_PRICE, AD_D, DEDUCTIBLE, PLAN_NAME, COVERAGE_AMOUNT;
-
-			//JSON
-			var json;
-
-			function store() {
-				cust_name = getElementsByName("cust_name");
-				sex = getElementsByName("sex");
-				DOB = getElementsByName("DOB");
-				state = getElementsByName("state");
-				city = getElementsByName("city");
-				var json = JSON.parse(search());
-				document.getElementsByName("json").innerHTML = json;
-			}
-
-			function search() {
-				//Search Participants and retrieve the Participant name, date of birth and gender
-				//SELECT pi.name, pi.DOB, pi.sex FROM v_participant pi WHERE pi.state = 'Alaska'
-				//url = "https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json" + "&q=state:" + state + "+sex:" + sex "&rows=100" + "&fl=name,DOB,sex,state";
-				url = "https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=state:Alaska+sex:M&rows=100&fl=name,DOB,sex,state";
-				fetch(url)
-					.then(res => res.json())
-
-			}
-		</script>
 	</head>
 
-	<index>
+	<body>
 		<img src = "VitechLogo.png"/>
-		<form action="display.html" method="put">
+		<form action="display.html" method="get">
 			Name: 
-			<input type="text" name="cust_name" value="First Last">
+			<input type="text" id="cust_name" value="First Last">
 			</br>
-			Sex: 
-			Male<input type="radio" name="sex" value="Male" checked>
-			Female<input type="radio" name="sex" value="Female">
+			Male<input type="radio" id="sex" value="Male" checked>
+			Female<input type="radio" id="sex" value="Female">
 			</br>
 			Date of Birth:
-			<input type="text" name="DOB" value="YYYYMMDD">
+			<input type="text" id="DOB" value="YYYYMMDD">
 			</br>
 			State:
-			<input type="text" name="state" value="State">
+			<input type="text" id="state" value="State">
 			</br>
 			City:
-			<input type="text" name="city" value="City">
+			<input type="text" id="city" value="City">
 			</br>
 
-			<input type="Submit" name = "Submit" value="Submit">
+			<input type="Submit" id="submit" value="Submit">
 
 		</form>
-	</index>
+	</body>
+	<script type="text/javascript" src="search.js"></script>
 </html>
+
