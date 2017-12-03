@@ -15,11 +15,11 @@ from pandas.io.json import json_normalize
 TRAINING_SIZE=10
 
 # Data sets
-PARTICIPANT_TRAINING = "PARTICIPANT_TRAINING.csv"
+PARTICIPANT_TRAINING = "static/PARTICIPANT_TRAINING.csv"
 PARTICIPANT_TRAINING_URL = "https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json" + \
     "&q=state:Alaska" + "&rows=50" + "&fl=name,DOB,sex,latitude,longitude"
 
-PARTICIPANT_TEST = "PARTICIPANT_TEST.csv"
+PARTICIPANT_TEST = "static/PARTICIPANT_TEST.csv"
 PARTICIPANT_TEST_URL = PARTICIPANT_TRAINING_URL
 
 preconditions=['R19.7', 'E11.65', 'F10.121', 'R00.8', 'F14.121', 'T85.622', 'T84.011', 'R04.2', 'B20.1', 'G30.0', 'N18.9', 'G80.4', 'B18.1', 'G47.33', 'M05.10', 'Z91.010', 'S62.308', 'R00.0']
@@ -143,19 +143,19 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
         data = group_data
     else:
         if nums_to_plan[which_plan] == "Bronze":
-            fileName = "BRONZIES_" + PARTICIPANT_TRAINING
+            fileName = "static/BRONZIES_PARTICIPANT_TRAINING.csv"
         elif nums_to_plan[which_plan] == "Silver":
-            fileName = "SILVERS_" + PARTICIPANT_TRAINING
+            fileName = "static/SILVERS_PARTICIPANT_TRAINING.csv"
         elif nums_to_plan[which_plan] == "Platinum":
-            fileName = "GOLDS_" + PARTICIPANT_TRAINING
+            fileName = "static/GOLDS_PARTICIPANT_TRAINING.csv"
         else:
-            fileName = "PLATINUMS_" + PARTICIPANT_TRAINING
+            fileName = "static/PLATINUMS_PARTICIPANT_TRAINING.csv"
         makeBuckets(data, which_plan, loopNum, lastLoopPrediction)
         heading = makeHeader(loopNum, lastLoopPrediction)
         print(heading)
         data = passed_data
 
-    if which_plan == -1 or not os.path.exists(fileName):
+    if which_plan == -1:
         heading[0] = len(data)
         with open(fileName, "wb") as f:
             for h in heading:
@@ -188,15 +188,15 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
     fileName = PARTICIPANT_TEST
     if which_plan != -1:
         if nums_to_plan[which_plan] == "Bronze":
-            fileName = "BRONZIES_" + PARTICIPANT_TRAINING
+            fileName = "static/BRONZIES_PARTICIPANT_TRAINING.csv"
         elif nums_to_plan[which_plan] == "Silver":
-            fileName = "SILVERS_" + PARTICIPANT_TRAINING
+            fileName = "static/SILVERS_PARTICIPANT_TRAINING.csv"
         elif nums_to_plan[which_plan] == "Platinum":
-            fileName = "GOLDS_" + PARTICIPANT_TRAINING
+            fileName = "static/GOLDS_PARTICIPANT_TRAINING.csv"
         else:
-            fileName = "PLATINUMS_" + PARTICIPANT_TRAINING
+            fileName = "static/PLATINUMS_PARTICIPANT_TRAINING.csv"
 
-    if which_plan == -1 or not os.path.exists(fileName):
+    if which_plan == -1:
         with open(PARTICIPANT_TEST, "wb") as f:
             for h in heading:
                 f.write(b"" + str(h).encode() + b",")
@@ -308,50 +308,69 @@ def grabPrediction():
 def writeAllData():
     return group_data
 
-def grabUserData():
-    global passed_data
+def grabUserData(data):
+    # global passed_data
     plan_prices = {}
 
     # loop over bronzies
-    lastPrediction = 0
-    for i in range(3):
-        print("i = " + str(i))
-        print(lastPrediction)
-        lastPrediction = int(setup(bronzies, 0, i, lastPrediction))
-        passed_data = []
-    plan_prices["BRONZE"] = lastPrediction
+    # lastPrediction = 0
+    # for i in range(3):
+    #     print("i = " + str(i))
+    #     print(lastPrediction)
+    #     lastPrediction = int(setup(bronzies, 0, i, lastPrediction))
+    #     passed_data = []
+    # plan_prices["BRONZE"] = lastPrediction
 
-    print(plan_prices["BRONZE"])
+    new_sample = []
 
-    # loop over silvers
-    lastPrediction = 0
-    for i in range(3):
-        lastPrediction = int(setup(silvers, 1, i, lastPrediction))
-        passed_data = []
-    plan_prices["SILVER"] = lastPrediction
+    for which_plan in range(4):
 
-    
-    print(plan_prices["SILVER"])
+        for key in data:
+            if key == "DOB":
+                d[key]=d[key][:4]
+            if key in str_to_nums_dict:
+                if key == "PURCHASED":
+                    plan = str_to_nums_dict[key]
+                new_sample.append(str_to_nums_dict[key][d[key]])
+            else:
+                new_sample.append(data[key])
+        else:
+            if nums_to_plan[which_plan] == "Bronze":
+                new_sample.append(data["BRONZE"])
+            elif nums_to_plan[which_plan] == "Silver":
+                new_sample.append(data["SILVER"])
+            elif nums_to_plan[which_plan] == "Gold":
+                new_sample.append(data["GOLD"])
+            else:
+                new_sample.append(data["PLATINUM"])
+        
+        new_sample = np.array(new_sample, dtype=np.float32)
+        
+        fileName = "static/BRONZIES_PARTICIPANT_TRAINING.csv"
+        training_set = tf.contrib.learn.datasets.base.load_csv_with_header(
+            filename=fileName,
+            target_dtype=np.int,
+            features_dtype=np.float32)
+        fileName = "static/BRONZIES_PARTICIPANT_TEST.csv"
+        test_set = tf.contrib.learn.datasets.base.load_csv_with_header(
+            filename=fileName,
+            target_dtype=np.int,
+            features_dtype=np.float32)
+        
+        feature_columns = [tf.feature_column.numeric_column("x", shape=[len(keys)])]
 
-    # loop over golds
-    lastPrediction = 0
-    for i in range(3):
-        lastPrediction = int(setup(golds, 2, i, lastPrediction))
-        passed_data = []
-    plan_prices["GOLD"] = lastPrediction
+        classifier = tf.estimator.DNNClassifier(feature_columns=feature_columns,
+                                                hidden_units=[10, 20, 10],
+                                                n_classes=len(keys),
+                                                model_dir="/tmp/insurance_plan_model/bronze")
+        predict_input_fn = tf.estimator.inputs.numpy_input_fn(
+            x={"x": new_sample},
+            num_epochs=1,
+            shuffle=False)
 
-    
-    print(plan_prices["GOLD"])
-
-    # loop over plats
-    lastPrediction = 0
-    for i in range(3):
-        lastPrediction = int(setup(platinums, 3, i, lastPrediction))
-        passed_data = []
-    plan_prices["PLATINUMS"] = lastPrediction
-
-    
-    print(plan_prices["PLATINUM"])
+        prediction = classifier.predict(input_fn=predict_input_fn)
+        plan_prices[nums_to_plan[which_plan]] = prediction;
+    print(plan_prices)
 
     return plan_prices
 

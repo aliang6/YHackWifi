@@ -1,4 +1,5 @@
 from flask import Flask, render_template, session, request, url_for, redirect, Markup
+from linearmodel import grabUserData, writeAllData
 
 app = Flask(__name__)
 
@@ -12,11 +13,11 @@ def index():
     else:
         button = request.form['button']
         if button == "Get My Quote":
-            userPredictions = grabUserData()
+            userPredictions = grabUserData(request.form)
             return render_template("index.html", participants=userPredictions)
         else:
             writeAllData()
-            return render_template("index.html", participants=group_participants)
+            return render_template("index.html", writeAllData = True)
 
 if __name__ == "__main__":
     app.debug = True
