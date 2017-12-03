@@ -23,7 +23,8 @@ PARTICIPANT_TRAINING_URL = "https://v3v10.vitechinc.com/solr/v_participant/selec
 PARTICIPANT_TEST = "PARTICIPANT_TEST.csv"
 PARTICIPANT_TEST_URL = PARTICIPANT_TRAINING_URL
 
-keys=["latitude","longitude","PURCHASED","EMPLOYMENT_STATUS", "ANNUAL_INCOME","HEIGHT","WEIGHT", "PEOPLE_COVERED", "OPTIONAL_INSURED", "BRONZE", "SILVER", "GOLD", "PLATINUM"]
+preconditions=['R19.7', 'E11.65', 'F10.121', 'R00.8', 'F14.121', 'T85.622', 'T84.011', 'R04.2', 'B20.1', 'G30.0', 'N18.9', 'G80.4', 'B18.1', 'G47.33', 'M05.10', 'Z91.010', 'S62.308', 'R00.0']
+keys=["latitude","longitude","PURCHASED","EMPLOYMENT_STATUS", "ANNUAL_INCOME","HEIGHT","WEIGHT", "PEOPLE_COVERED", "OPTIONAL_INSURED", "BRONZE", "SILVER", "GOLD", "PLATINUM"]+preconditions
 #keys = ["sex", "EMPLOYMENT_STATUS", "TOBACCO", "MARITAL_STATUS", "latitude", "longitude"]
 plan_ranks = ["BRONZE", "SILVER", "GOLD", "PLATINUM"]
 heading = [0, (len(keys))] + plan_ranks
@@ -65,8 +66,16 @@ def collapse():
         detail = urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=1").read()
         detail = flatten_json(json.loads(detail)['response']['docs'][0])
         for key in detail:
+            if key == "PRE_CONDITIONS":
+                for precon in detail[key]:
+                    participant[precon["ICD_CODE"]]=str_to_nums_dict[precon["Risk_factor"]]
+            if key == "DOB":
+                detail[key]=detail[key][:4]
             if key in keys:
                 participant[key]=detail[key]
+        if "PRE_CONDITIONS" not in detail:
+            for precon in preconditions:
+                participant[precon]=0
         quote = urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=1").read()
         quote = flatten_json(json.loads(quote)['response']['docs'][0])
         for key in quote:
