@@ -12,7 +12,8 @@ import tensorflow as tf
 import collections
 from pandas.io.json import json_normalize
 
-TRAINING_SIZE=1482000
+TRAINING_SIZE=1000
+actual_size=1000
 
 # Data sets
 PARTICIPANT_TRAINING = "PARTICIPANT_TRAINING.csv"
@@ -26,16 +27,21 @@ keys=["latitude","longitude","PURCHASED","EMPLOYMENT_STATUS"]
 #keys = ["sex", "EMPLOYMENT_STATUS", "TOBACCO", "MARITAL_STATUS", "latitude", "longitude"]
 plan_ranks = ["BRONZE", "SILVER", "GOLD", "PLATINUM"]
 heading = [0, (len(keys))] + plan_ranks
-str_to_nums_dict = {"sex": {"M": 0, "F": 1},
-                    "EMPLOYMENT_STATUS": {"Unemployed": 0, "Employed": 1},
-                    "TOBACCO": {"NO": 0, "YES": 1},
-                    "MARITAL_STATUS": {"S": 0, "M": 1} }
 plan_to_nums_dict = {"BRONZE": 0,
                      "SILVER": 1,
                      "GOLD": 2,
                      "PLATINUM": 3 }
-
-group_data=[]
+plan_to_nums_dict_normal_case = {"Bronze": 0,
+                                 "Silver": 1,
+                                 "Gold": 2,
+                                 "Platinum": 3}
+str_to_nums_dict = {"sex": {"M": 0, "F": 1},
+                    "EMPLOYMENT_STATUS": {"Unemployed": 0, "Employed": 1},
+                    "TOBACCO": {"NO": 0, "YES": 1},
+                    "MARITAL_STATUS": {"S": 0, "M": 1},
+                    "PURCHASED" : plan_to_nums_dict_normal_case }
+group_participants = []
+group_data = []
 
 #credit to Amir Ziai
 def flatten_json(y):
@@ -55,61 +61,108 @@ def flatten_json(y):
     return out
 
 def collapse():
-    group_participants = urlopen("https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
-    group_participants = json.loads(group_participants)['response']['docs']
-    details = urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
-    details = json.loads(details)['response']['docs']
-    quotes = urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
-    quotes = json.loads(quotes)['response']['docs']
-    for participant in group_participants:
-        for detail in details:
-            if detail['id']==participant['id']:
-                print("fpound")
-                for key in detail:
-                    participant[key]=detail[key]
-        for quote in quotes:
-            if quote['id']==participant['id']:
-                for key in quote:
-                    participant[key]=quote[key]
-    print (group_participants[0])
-    group_data=group_participants
+    global group_participants
+    global group_data
+    group_participants = urlopen("https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)).read()
+    group_data = json.loads(group_participants)['response']['docs']
+    for participant in group_data:
+        detail = urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=1").read()
+        detail = flatten_json(json.loads(detail)['response']['docs'][0])
+        for key in detail:
+            if key in keys:
+                participant[key]=detail[key]
+        quote = urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=1").read()
+        quote = flatten_json(json.loads(quote)['response']['docs'][0])
+        for key in quote:
+            if key in keys:
+                participant[key]=quote[key]
+
+# def collapse():
+#     group_participants = urlopen("https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
+#     print("hello")
+#     group_participants = json.loads(group_participants)['response']['docs']
+#     print("hello")
+#     details = urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
+#     details = json.loads(details)['response']['docs']
+#     print("hello")
+#     quotes = urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
+#     quotes = json.loads(quotes)['response']['docs']
+#     print("hello")
+#     num_participants = 0
+#     for participant in group_participants:
+#         if num_participants >= actual_size:
+#             break
+#         found_details = []
+#         found_quote = []
+#         for detail in details:
+#             if detail['id']==participant['id']:
+#                 print("fpound")
+#                 for key in detail:
+#                     participant[key]=detail[key]
+#                 found_details = True
+#                 break
+#         for quote in quotes:
+#             if quote['id']==participant['id']:
+#                 for key in quote:
+#                     participant[key]=quote[key]
+#                 found_quote = True
+#                 break
+#         if found_details and found_quote:
+#             num_participants += 1
+#         #print(num_participants)
+#     print(num_participants)
+#     print (group_participants)
+#     group_data=group_participants
 
 def main():
+    collapse()
     # If the training and test sets aren't stored locally, download them.
     if not os.path.exists(PARTICIPANT_TRAINING):
-        raw = urlopen(PARTICIPANT_TRAINING_URL).read()
-        raw = json.loads(raw.decode('utf-8'))['response']['docs']
-        raw = [{key: i[key] for key in keys} for i in raw]
+        #raw = urlopen(PARTICIPANT_TRAINING_URL).read()
+        #raw = json.loads(raw.decode('utf-8'))['response']['docs']
+        raw = group_data
+        #raw = [{key: i[key] for key in keys} for i in raw]
         heading[0] = len(raw)
         with open(PARTICIPANT_TRAINING, "wb") as f:
             for h in heading:
                 f.write(b"" + str(h).encode() + b",")
             f.write(b'\n')
             for d in raw:
+                plan = ""
                 for key in d:
                     if key in keys:
                         if key in str_to_nums_dict:
+                            if key == "PURCHASED":
+                                plan = str_to_nums_dict[key]
                             f.write(b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b",")
+                        elif key in plan_ranks:
+                            f.write(b"" + str( plan_to_nums_dict[key] ) + b",")
                         else:
-                            f.write(b"" + str(d[key]) + b",")
-                f.write(str(random.randint(0,3)).encode() + b'\n')
+                            f.write(b"" + str(d[key]).encode() + b",")
+                f.write(str(plan[d[key]]).encode() + b'\n')
     if not os.path.exists(PARTICIPANT_TEST):
-        raw = urlopen(PARTICIPANT_TRAINING_URL).read()
-        raw = json.loads(raw.decode('utf-8'))['response']['docs']
-        raw = [{key: i[key] for key in keys} for i in raw]
+        #raw = urlopen(PARTICIPANT_TRAINING_URL).read()
+        #raw = json.loads(raw.decode('utf-8'))['response']['docs']
+        raw = group_data
+        #raw = [{key: i[key] for key in keys} for i in raw]
         heading[0] = len(raw)
         with open(PARTICIPANT_TEST, "wb") as f:
             for h in heading:
                 f.write(b"" + str(h).encode() + b",")
             f.write(b'\n')
             for d in raw:
+                plan = ""
                 for key in d:
                     if key in keys:
                         if key in str_to_nums_dict:
+                            if key == "PURCHASED":
+                                plan = str_to_nums_dict[key]
                             f.write(b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b",")
+                        elif key in plan_ranks:
+                            f.write(b"" + str( plan_to_nums_dict[key] ) + b",")
                         else:
-                            f.write(b"" + str(d[key]) + b",")
-                f.write(str(random.randint(0,3)) + b'\n')
+                            f.write(b"" + str(d[key]).encode() + b",")
+                f.write(str(plan[d[key]]).encode() + b'\n')
 
     # Load datasets.
     training_set = tf.contrib.learn.datasets.base.load_csv_with_header(
@@ -138,7 +191,7 @@ def main():
         shuffle=True)
 
     # Train model.
-    classifier.train(input_fn=train_input_fn, steps=2000)
+    classifier.train(input_fn=train_input_fn, steps=5000)
 
     # Define the test inputs
     test_input_fn = tf.estimator.inputs.numpy_input_fn(
@@ -172,5 +225,5 @@ def main():
 
 
 if __name__ == "__main__":
-    collapse()
-    #main()
+    #collapse()
+    main()
