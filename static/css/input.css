@@ -1,6 +1,6 @@
 body {
 	font: Avenir;
-	font-size: 4em;
+	font-size: 2em;
 	color: #4682B4;
 }
 
@@ -26,11 +26,21 @@ label {
 	font-weight: normal;
 }
 
-{
-
+h4 {
+	font-weight: normal;
 }
 
-#hr1{
+.sex {
+	display: inline-block;
+	position: relative;
+	margin-top: 5%;
+}
+
+.row{
+	margin-top: 2%;
+}
+
+.hr1{
 	border-top: 1px solid #32CD32;
 	border-bottom: 1px solid #32CD32;
 }
@@ -43,6 +53,15 @@ label {
 #hr3{
 	border-top: 1px solid #6495ED;
 	border-bottom: 1px solid #6495ED;
+}
+
+#bottom_line{
+	align: center;
+	margin-top: 2%;
+	margin-bottom: 2%;
+	width: 30%;
+	border-top: 1px solid #32CD32;
+	border-bottom: 1px solid #32CD32;
 }
 
 #logo {
@@ -86,7 +105,22 @@ label {
     outline: none;
 }
 
+input[type="text"] {
+	border: none;
+	border-bottom: 1px solid #6495ED;
+    width: 300px;
+    transition: width 0.4s ease-in-out;
+    text-align: center;
+    color: #708090;
+}
+
+input[type="text"]:focus {
+    width: 100%;
+    outline: none;
+}
+
 #button_row {
 	margin-top: 2%;
+	margin-bottom: 3%;
 }
 
