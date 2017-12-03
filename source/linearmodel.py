@@ -12,8 +12,7 @@ import tensorflow as tf
 import collections
 from pandas.io.json import json_normalize
 
-TRAINING_SIZE=10
-actual_size=1000
+TRAINING_SIZE=1000
 
 # Data sets
 PARTICIPANT_TRAINING = "PARTICIPANT_TRAINING.csv"
@@ -24,7 +23,7 @@ PARTICIPANT_TEST = "PARTICIPANT_TEST.csv"
 PARTICIPANT_TEST_URL = PARTICIPANT_TRAINING_URL
 
 preconditions=['R19.7', 'E11.65', 'F10.121', 'R00.8', 'F14.121', 'T85.622', 'T84.011', 'R04.2', 'B20.1', 'G30.0', 'N18.9', 'G80.4', 'B18.1', 'G47.33', 'M05.10', 'Z91.010', 'S62.308', 'R00.0']
-keys=["latitude","longitude","PURCHASED","EMPLOYMENT_STATUS", "ANNUAL_INCOME","HEIGHT","WEIGHT", "PEOPLE_COVERED", "OPTIONAL_INSURED", "BRONZE", "SILVER", "GOLD", "PLATINUM"]+preconditions
+keys=["latitude","longitude","PURCHASED","EMPLOYMENT_STATUS", "ANNUAL_INCOME","HEIGHT","WEIGHT", "PEOPLE_COVERED", "OPTIONAL_INSURED", "DOB", "BRONZE", "SILVER", "GOLD", "PLATINUM"]+preconditions
 #keys = ["sex", "EMPLOYMENT_STATUS", "TOBACCO", "MARITAL_STATUS", "latitude", "longitude"]
 plan_ranks = ["BRONZE", "SILVER", "GOLD", "PLATINUM"]
 heading = [0, (len(keys))] + plan_ranks
@@ -36,7 +35,8 @@ str_to_nums_dict = {"sex": {"M": 0, "F": 1},
                     "EMPLOYMENT_STATUS": {"Unemployed": 0, "Employed": 1},
                     "TOBACCO": {"NO": 0, "YES": 1},
                     "MARITAL_STATUS": {"S": 0, "M": 1},
-                    "PURCHASED" : plan_to_nums_dict_normal_case }
+                    "PURCHASED" : plan_to_nums_dict_normal_case,
+                    "Risk_factor" : {"Low": 1, "Medium": 2, "High": 3}}
 group_participants = []
 group_data = []
 
@@ -66,22 +66,22 @@ def collapse():
         detail = urlopen("https://v3v10.vitechinc.com/solr/v_participant_detail/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=1").read()
         detail = flatten_json(json.loads(detail)['response']['docs'][0])
         for key in detail:
-            if key == "PRE_CONDITIONS":
-                for precon in detail[key]:
-                    participant[precon["ICD_CODE"]]=str_to_nums_dict[precon["Risk_factor"]]
-            if key == "DOB":
-                detail[key]=detail[key][:4]
-            if key in keys:
-                participant[key]=detail[key]
-        if "PRE_CONDITIONS" not in detail:
+            #print (key)
             for precon in preconditions:
                 participant[precon]=0
+            if key == "PRE_CONDITIONS":
+                abc = json.loads(detail[key])
+                for precon in abc:
+                    participant[precon["ICD_CODE"]]=str_to_nums_dict["Risk_factor"][precon["Risk_factor"]]
+                    #print(str_to_nums_dict["Risk_factor"][precon["Risk_factor"]])
+            if key in keys:
+                participant[key]=detail[key]
         quote = urlopen("https://v3v10.vitechinc.com/solr/v_quotes/select?indent=on&wt=json&q=id="+str(participant['id'])+"&*:*&rows=1").read()
         quote = flatten_json(json.loads(quote)['response']['docs'][0])
         for key in quote:
             if key in keys:
                 participant[key]=quote[key]
-
+        #print (participant)
 # def collapse():
 #     group_participants = urlopen("https://v3v10.vitechinc.com/solr/v_participant/select?indent=on&wt=json&q=*:*&rows="+str(TRAINING_SIZE)+"&fl=*").read()
 #     print("hello")
@@ -136,6 +136,8 @@ def main():
                 plan = ""
                 for key in d:
                     if key in keys:
+                        if key == "DOB":
+                            d[key]=d[key][:4]
                         if key in str_to_nums_dict:
                             if key == "PURCHASED":
                                 plan = str_to_nums_dict[key]
@@ -144,7 +146,7 @@ def main():
                             #f.write(b"" + str( plan_to_nums_dict[key] ) + b",")
                         else:
                             f.write(b"" + str(d[key]).encode() + b",")
-                f.write(str(plan[d[key]]).encode() + b'\n')
+                f.write(b"" + str(plan[d["PURCHASED"]]).encode() + b"\n")
     if not os.path.exists(PARTICIPANT_TEST):
         #raw = urlopen(PARTICIPANT_TRAINING_URL).read()
         #raw = json.loads(raw.decode('utf-8'))['response']['docs']
@@ -159,6 +161,8 @@ def main():
                 plan = ""
                 for key in d:
                     if key in keys:
+                        if key == "DOB":
+                            d[key]=d[key][:4]
                         if key in str_to_nums_dict:
                             if key == "PURCHASED":
                                 plan = str_to_nums_dict[key]
@@ -167,7 +171,7 @@ def main():
                             #f.write(b"" + str( plan_to_nums_dict[key] ) + b",")
                         else:
                             f.write(b"" + str(d[key]).encode() + b",")
-                f.write(str(plan[d[key]]).encode() + b'\n')
+                f.write(str(plan[d["PURCHASED"]]).encode() + b"\n")
 
     # Load datasets.
     training_set = tf.contrib.learn.datasets.base.load_csv_with_header(
