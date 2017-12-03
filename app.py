@@ -10,11 +10,13 @@ def index():
     if request.method == 'GET':
         return render_template("index.html")
     else:
-        return render_template("index.html")
-
-@app.route("/submit", methods=['GET','POST'])
-def submit():
-    return render_template("index.html")
+        button = request.form['button']
+        if button == "Get My Quote":
+            userPredictions = grabUserData()
+            return render_template("index.html", participants=userPredictions)
+        else:
+            writeAllData()
+            return render_template("index.html", participants=group_participants)
 
 if __name__ == "__main__":
     app.debug = True
