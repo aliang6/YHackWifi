@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Input</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <title>Vitech: Input</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script type="text/javascript" src="../input.js"></script>
     <link rel="stylesheet" href="../static/css/input.css">
+
   </head>
 
   <body>
       <div class = "container-fluid">
-        <div class="row">
+        <div class="row" id = "top_row">
           <div class="col-sm-3">
-              <a href="main.html"><img id="logo" src="../static/VitechLogo.png" style="width:75%"/></a>
+              <a href="index.html"><img id="logo" src="../static/VitechLogo.png" style="width:75%"/></a>
           </div>
           </br>
           <hr class="hr1"/>
@@ -157,6 +162,9 @@
             <div class="col-md-1">
               <h3>No</h3>
             </div>
+            <div class="col-md-3" align="center">
+              <h3>ICD Code</h3>
+            </div>
           </div>
 
           <div class="row">
@@ -165,11 +173,37 @@
               <h4>Chronic Viral Hepatitis B without Delta-Agent<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="Chronic viral hepatitis B without delta-agent" id="hepBy" class="yesno" value="Yes">
+              <input type="radio" name="Chronic viral hepatitis B without delta-agent1" id="hepBy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="Chronic viral hepatitis B without delta-agent" id="hepBn" class="yesno" value="No" checked>
+              <input type="radio" name="Chronic viral hepatitis B without delta-agent1" id="hepBn" class="yesno" value="No" checked>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <div class="form-group">
+                <select name="Chronic viral hepatitis B without delta-agent" class="form-control">
+                  <option>000.0</option>
+                  <option>R19.7</option>
+                  <option>E11.65</option>
+                  <option>F10.121</option>
+                  <option>R00.8</option>
+                  <option>F14.121</option>
+                  <option>T85.622</option>
+                  <option>T84.011</option>
+                  <option>R04.2</option>
+                  <option>B20.1</option>
+                  <option>G30.0</option>
+                  <option>N18.9</option>
+                  <option>G80.4</option>
+                  <option>B18.1</option>
+                  <option>G47.33</option>
+                  <option>M05.10</option>
+                  <option>Z91.01</option>
+                  <option>S62.308</option>
+                  <option>R00.0</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -179,11 +213,37 @@
               <h4>Ataxic cerebral palsy<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="Ataxic cerebral palsy" id="acpy" class="yesno" value="Yes">
+              <input type="radio" name="Ataxic cerebral palsy1" id="acpy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="Ataxic cerebral palsy" id="acpn" class="yesno" value="No" checked>
+              <input type="radio" name="Ataxic cerebral palsy1" id="acpn" class="yesno" value="No" checked>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <div class="form-group">
+                <select name="Ataxic cerebral palsy" class="form-control">
+                  <option>000.0</option>
+                  <option>R19.7</option>
+                  <option>E11.65</option>
+                  <option>F10.121</option>
+                  <option>R00.8</option>
+                  <option>F14.121</option>
+                  <option>T85.622</option>
+                  <option>T84.011</option>
+                  <option>R04.2</option>
+                  <option>B20.1</option>
+                  <option>G30.0</option>
+                  <option>N18.9</option>
+                  <option>G80.4</option>
+                  <option>B18.1</option>
+                  <option>G47.33</option>
+                  <option>M05.10</option>
+                  <option>Z91.01</option>
+                  <option>S62.308</option>
+                  <option>R00.0</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -193,11 +253,37 @@
               <h4>Diarrhea<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="Diarrhea, unspecified" id="diary" class="yesno" value="Yes">
+              <input type="radio" name="Diarrhea, unspecified1" id="diary" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="Diarrhea, unspecified" id="diarn" class="yesno" value="No" checked>
+              <input type="radio" name="Diarrhea, unspecified1" id="diarn" class="yesno" value="No" checked>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <div class="form-group">
+                <select name="Diarrhea, unspecified" class="form-control">
+                  <option>000.0</option>
+                  <option>R19.7</option>
+                  <option>E11.65</option>
+                  <option>F10.121</option>
+                  <option>R00.8</option>
+                  <option>F14.121</option>
+                  <option>T85.622</option>
+                  <option>T84.011</option>
+                  <option>R04.2</option>
+                  <option>B20.1</option>
+                  <option>G30.0</option>
+                  <option>N18.9</option>
+                  <option>G80.4</option>
+                  <option>B18.1</option>
+                  <option>G47.33</option>
+                  <option>M05.10</option>
+                  <option>Z91.01</option>
+                  <option>S62.308</option>
+                  <option>R00.0</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -207,11 +293,37 @@
               <h4>Tachycardia<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="Tachycardia, unspecified" id="tachy" class="yesno" value="Yes">
+              <input type="radio" name="Tachycardia, unspecified1" id="tachy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="Tachycardia, unspecified" id="tachn" class="yesno" value="No" checked>
+              <input type="radio" name="Tachycardia, unspecified1" id="tachn" class="yesno" value="No" checked>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <div class="form-group">
+                <select name="Tachycardia, unspecified" class="form-control">
+                  <option>000.0</option>
+                  <option>R19.7</option>
+                  <option>E11.65</option>
+                  <option>F10.121</option>
+                  <option>R00.8</option>
+                  <option>F14.121</option>
+                  <option>T85.622</option>
+                  <option>T84.011</option>
+                  <option>R04.2</option>
+                  <option>B20.1</option>
+                  <option>G30.0</option>
+                  <option>N18.9</option>
+                  <option>G80.4</option>
+                  <option>B18.1</option>
+                  <option>G47.33</option>
+                  <option>M05.10</option>
+                  <option>Z91.01</option>
+                  <option>S62.308</option>
+                  <option>R00.0</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -221,11 +333,37 @@
               <h4>Obstructive Sleep Apnea<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="Obstructive Sleep Apnea" id="osay" class="yesno" value="Yes">
+              <input type="radio" name="Obstructive Sleep Apnea1" id="osay" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="Obstructive Sleep Apnea" id="osan" class="yesno" value="No" checked>
+              <input type="radio" name="Obstructive Sleep Apnea1" id="osan" class="yesno" value="No" checked>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <div class="form-group">
+                <select name="Obstructive Sleep Apnea" class="form-control">
+                  <option>000.0</option>
+                  <option>R19.7</option>
+                  <option>E11.65</option>
+                  <option>F10.121</option>
+                  <option>R00.8</option>
+                  <option>F14.121</option>
+                  <option>T85.622</option>
+                  <option>T84.011</option>
+                  <option>R04.2</option>
+                  <option>B20.1</option>
+                  <option>G30.0</option>
+                  <option>N18.9</option>
+                  <option>G80.4</option>
+                  <option>B18.1</option>
+                  <option>G47.33</option>
+                  <option>M05.10</option>
+                  <option>Z91.01</option>
+                  <option>S62.308</option>
+                  <option>R00.0</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -235,11 +373,37 @@
               <h4>Fracture of Metacarpal Bone with Laterality<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="Unspecified fracture of specified metacarpal bone with unspecified laterality" id="fmbly" class="yesno" value="Yes">
+              <input type="radio" name="Unspecified fracture of specified metacarpal bone with unspecified laterality1" id="fmbly" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="Unspecified fracture of specified metacarpal bone with unspecified laterality" id="fmbln" class="yesno" value="No" checked>
+              <input type="radio" name="Unspecified fracture of specified metacarpal bone with unspecified laterality1" id="fmbln" class="yesno" value="No" checked>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <div class="form-group">
+                <select name="Unspecified fracture of specified metacarpal bone with unspecified laterality" class="form-control">
+                  <option>000.0</option>
+                  <option>R19.7</option>
+                  <option>E11.65</option>
+                  <option>F10.121</option>
+                  <option>R00.8</option>
+                  <option>F14.121</option>
+                  <option>T85.622</option>
+                  <option>T84.011</option>
+                  <option>R04.2</option>
+                  <option>B20.1</option>
+                  <option>G30.0</option>
+                  <option>N18.9</option>
+                  <option>G80.4</option>
+                  <option>B18.1</option>
+                  <option>G47.33</option>
+                  <option>M05.10</option>
+                  <option>Z91.01</option>
+                  <option>S62.308</option>
+                  <option>R00.0</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -249,11 +413,37 @@
               <h4>Abnormal Heart Beat<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="Other abnormalities of heart beat" id="ahb" class="ahby" value="Yes">
+              <input type="radio" name="Other abnormalities of heart beat1" id="ahb" class="ahby" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="Other abnormalities of heart beat" id="ahb" class="ahbn" value="No" checked>
+              <input type="radio" name="Other abnormalities of heart beat1" id="ahb" class="ahbn" value="No" checked>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <div class="form-group">
+                <select name="Other abnormalities of heart beat" class="form-control">
+                  <option>000.0</option>
+                  <option>R19.7</option>
+                  <option>E11.65</option>
+                  <option>F10.121</option>
+                  <option>R00.8</option>
+                  <option>F14.121</option>
+                  <option>T85.622</option>
+                  <option>T84.011</option>
+                  <option>R04.2</option>
+                  <option>B20.1</option>
+                  <option>G30.0</option>
+                  <option>N18.9</option>
+                  <option>G80.4</option>
+                  <option>B18.1</option>
+                  <option>G47.33</option>
+                  <option>M05.10</option>
+                  <option>Z91.01</option>
+                  <option>S62.308</option>
+                  <option>R00.0</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -263,11 +453,37 @@
               <h4>Type 2 Diabetes Mellitus with Hyperglycemia<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="Type 2 diabetes mellitus with hyperglycemia" id="t2dy" class="yesno" value="Yes">
+              <input type="radio" name="Type 2 diabetes mellitus with hyperglycemia1" id="t2dy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="Type 2 diabetes mellitus with hyperglycemia" id="t2dn" class="yesno" value="No" checked>
+              <input type="radio" name="Type 2 diabetes mellitus with hyperglycemia1" id="t2dn" class="yesno" value="No" checked>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <div class="form-group">
+                <select name="Type 2 diabetes mellitus with hyperglycemia" class="form-control">
+                  <option>000.0</option>
+                  <option>R19.7</option>
+                  <option>E11.65</option>
+                  <option>F10.121</option>
+                  <option>R00.8</option>
+                  <option>F14.121</option>
+                  <option>T85.622</option>
+                  <option>T84.011</option>
+                  <option>R04.2</option>
+                  <option>B20.1</option>
+                  <option>G30.0</option>
+                  <option>N18.9</option>
+                  <option>G80.4</option>
+                  <option>B18.1</option>
+                  <option>G47.33</option>
+                  <option>M05.10</option>
+                  <option>Z91.01</option>
+                  <option>S62.308</option>
+                  <option>R00.0</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -277,11 +493,37 @@
               <h4>HIV Disease Resulting in Bacterial Infection<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="HIV disease resulting in other bacterial infections" id="hivy" class="yesno" value="Yes">
+              <input type="radio" name="HIV disease resulting in other bacterial infections1" id="hivy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="HIV disease resulting in other bacterial infections" id="hivn" class="yesno" value="No" checked>
+              <input type="radio" name="HIV disease resulting in other bacterial infections1" id="hivn" class="yesno" value="No" checked>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <div class="form-group">
+                <select name="HIV disease resulting in other bacterial infections" class="form-control">
+                  <option>000.0</option>
+                  <option>R19.7</option>
+                  <option>E11.65</option>
+                  <option>F10.121</option>
+                  <option>R00.8</option>
+                  <option>F14.121</option>
+                  <option>T85.622</option>
+                  <option>T84.011</option>
+                  <option>R04.2</option>
+                  <option>B20.1</option>
+                  <option>G30.0</option>
+                  <option>N18.9</option>
+                  <option>G80.4</option>
+                  <option>B18.1</option>
+                  <option>G47.33</option>
+                  <option>M05.10</option>
+                  <option>Z91.01</option>
+                  <option>S62.308</option>
+                  <option>R00.0</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -291,11 +533,37 @@
               <h4>Cough with Hemorrhage<h4>
             </div>
             <div class="col-md-1">
-              <input type="radio" name="cough with hemorrhage" id="cwhy" class="yesno" value="Yes">
+              <input type="radio" name="cough with hemorrhage1" id="cwhy" class="yesno" value="Yes">
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-              <input type="radio" name="cough with hemorrhage" id="cwhn" class="yesno" value="No" checked>
+              <input type="radio" name="cough with hemorrhage1" id="cwhn" class="yesno" value="No" checked>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+              <div class="form-group">
+                <select name="cough with hemorrhage" class="form-control">
+                  <option>000.0</option>
+                  <option>R19.7</option>
+                  <option>E11.65</option>
+                  <option>F10.121</option>
+                  <option>R00.8</option>
+                  <option>F14.121</option>
+                  <option>T85.622</option>
+                  <option>T84.011</option>
+                  <option>R04.2</option>
+                  <option>B20.1</option>
+                  <option>G30.0</option>
+                  <option>N18.9</option>
+                  <option>G80.4</option>
+                  <option>B18.1</option>
+                  <option>G47.33</option>
+                  <option>M05.10</option>
+                  <option>Z91.01</option>
+                  <option>S62.308</option>
+                  <option>R00.0</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -304,7 +572,7 @@
           <div class="row" id="button_row">
             <div class="col-md-5"></div>
             <div class="col-md-2" align="center">
-              <button type="button" id="submit" class="btn btn-success btn-lg">Get My Quote</button>
+              <button type="button" id="submit" class="btn btn-success btn-lg" value="Get My Quote">Get My Quote</button>
             </div>
           </div>
         </div>

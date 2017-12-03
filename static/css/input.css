@@ -40,6 +40,10 @@ h4 {
 	margin-top: 2%;
 }
 
+#top_row{
+	margin-top: 0%;
+}
+
 .hr1{
 	border-top: 1px solid #32CD32;
 	border-bottom: 1px solid #32CD32;
@@ -124,3 +128,6 @@ input[type="text"]:focus {
 	margin-bottom: 3%;
 }
 
+.form-control {
+	margin-top: 13%;
+}
