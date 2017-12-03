@@ -36,7 +36,7 @@ nums_to_plan = {0: "Bronze",
                 3: "Platinum"}
 str_to_nums_dict = {"sex": {"M": 0, "F": 1},
                     "EMPLOYMENT_STATUS": {"Unemployed": 0, "Employed": 1},
-                    "TOBACCO": {"NO": 0, "YES": 1},
+                    "TOBACCO": {"No": 0, "Yes": 1},
                     "MARITAL_STATUS": {"S": 0, "M": 1},
                     "PURCHASED" : plan_to_nums_dict_normal_case,
                     "Risk_factor" : {"Low": 1, "Medium": 2, "High": 3}}
@@ -140,6 +140,8 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
     if which_plan == -1:
         collapse()
         data = group_data
+    elif which_plan == -2:
+        fileName = "data.csv"
     else:
         if nums_to_plan[which_plan] == "Bronze":
             fileName = "static/BRONZIES_PARTICIPANT_TRAINING.csv"
@@ -154,29 +156,33 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
         print(heading)
         data = passed_data
 
-    if which_plan == -1:
+    if which_plan == -1 or which_plan == -2:
         heading[0] = len(data)
-        datfile=open("data.csv","a")
+        datfile=open(fileName.csv,"a")
         with open(fileName, "wb") as f:
-            for h in heading:
-                f.write(b"" + str(h).encode() + b",")
-            f.write(b'\n')
+            if which_plan == -1:
+                for h in heading:
+                    f.write(b"" + str(h).encode() + b",")
+                f.write(b'\n')
             for d in data:
                 plan = ""
                 for key in d:
                     if key in keys:
-                        if key == "DOB":
-                            d[key]=d[key][:4]
-                        if key in str_to_nums_dict:
-                            if key == "PURCHASED":
-                                plan = str_to_nums_dict[key]
-                            out=b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b","
-                            f.write(out)
-                            datfile.write(out)
-                        else:
-                            out=b"" + str(d[key]).encode() + b","
-                            f.write(out)
-                            datfile.write(out)
+                        if which_plan == -1:
+                            if key == "DOB":
+                                d[key]=d[key][:4]
+                            if key in str_to_nums_dict:
+                                if key == "PURCHASED":
+                                    plan = str_to_nums_dict[key]
+                                out=b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b","
+                                f.write(out)
+                                datfile.write(out)
+                            else:
+                                out=b"" + str(d[key]).encode() + b","
+                                f.write(out)
+                                datfile.write(out)
+                        if which_plan == -2 and key in plan_ranks:
+                            f.write(b"" + str( d[key] ).encode + b",")
                 if which_plan == -1:
                     f.write(b"" + str(plan[d["PURCHASED"]]).encode() + b"\n")
                 else:
@@ -202,21 +208,29 @@ def setup(data, which_plan, loopNum, lastLoopPrediction):
 
     if which_plan == -1:
         with open(PARTICIPANT_TEST, "wb") as f:
-            for h in heading:
-                f.write(b"" + str(h).encode() + b",")
-            f.write(b'\n')
+            if which_plan == -1:
+                for h in heading:
+                    f.write(b"" + str(h).encode() + b",")
+                f.write(b'\n')
             for d in data:
                 plan = ""
                 for key in d:
                     if key in keys:
-                        if key == "DOB":
-                            d[key]=d[key][:4]
-                        if key in str_to_nums_dict:
-                            if key == "PURCHASED":
-                                plan = str_to_nums_dict[key]
-                            f.write(b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b",")
-                        else:
-                            f.write(b"" + str(d[key]).encode() + b",")
+                        if which_plan == -1:
+                            if key == "DOB":
+                                d[key]=d[key][:4]
+                            if key in str_to_nums_dict:
+                                if key == "PURCHASED":
+                                    plan = str_to_nums_dict[key]
+                                out=b"" + str( str_to_nums_dict[key][d[key]] ).encode() + b","
+                                f.write(out)
+                                datfile.write(out)
+                            else:
+                                out=b"" + str(d[key]).encode() + b","
+                                f.write(out)
+                                datfile.write(out)
+                        if which_plan == -2 and key in plan_ranks:
+                            f.write(b"" + str( d[key] ).encode + b",")
                 if which_plan == -1:
                     f.write(b"" + str(plan[d["PURCHASED"]]).encode() + b"\n")
                 else:
@@ -318,6 +332,11 @@ def grabPrediction(data):
             print(key)
             print(str_to_nums_dict[key])
             print(data[key])
+            if key == "EMPLOYMENT_STATUS":
+                if data[key] == "E":
+                    data[key] = "Employed"
+                else:
+                    data[key] = "Unemployed"
             new_sample.append(str_to_nums_dict[key][data[key]])
         else:
             new_sample.append(data[key])
